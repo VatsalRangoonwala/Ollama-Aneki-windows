@@ -32,7 +32,6 @@ class createModel:
                     f"{alert}No model is configured, skipping...\n{alert.replace('[', '[/')}"
                 )
                 return
-
             selected = Prompt().ask(
                 "Select one of the configured models:",
                 default=modellist[0],
@@ -165,24 +164,17 @@ Y8b  d8 88b  d88 db   8D    88    `8b  d8' 88  88  88        88  88  88 `8b  d8'
                 pass
         except:
             Path("saves/custom/models/").mkdir(parents=True, exist_ok=True)
-            with open(f"saves/custom/model-list.txt", "w") as file:
-                print("/n")
-                pass
+            with open("saves/custom/model-list.txt", "w") as file:
+                file.write("")
 
         try:
             ollama.create(model=name, modelfile=model_file)
             with open(f"saves/custom/models/{name}.txt", "w") as file:
                 file.write(model_file)
             with open("saves/custom/model-list.txt", "r") as modelslist:
-                print("here")
                 rprint(
                     f"{normal}Checking if the model is already in the model list...{normal.replace('[', '[/')}"
                 )
-                try:
-                    modellist = modelslist.read()
-                except:
-                    with open("saves/custom/model-list.txt", "w") as temp:
-                        temp.write("\n")
                 modellist = modelslist.read()
                 try:
                     modellist = modellist.split("\n").index(name)
