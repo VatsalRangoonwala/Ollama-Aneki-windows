@@ -1,2 +1,2 @@
-# Ollama-Aaneki
+# Ollama-Aneki
 Ollama TUI
