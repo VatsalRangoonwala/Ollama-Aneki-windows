@@ -9,11 +9,14 @@ from utility.textSearch import txt
 
 class createModel:
     def History():
+        # this 4 are colors
         normal = str(txt().search("normal", "saves/default/config.txt"))
         highlight = str(txt().search("highlight", "saves/default/config.txt"))
         alert = str(txt().search("alert", "saves/default/config.txt"))
         asciiart = str(txt().search("asciiart", "saves/default/config.txt"))
+
         rprint(f"\n{normal}")
+        # checking whether user has created any model file yet or not
         try:
             with open("saves/custom/model-list.txt", "r") as file:
                 pass
@@ -22,7 +25,10 @@ class createModel:
                 f"{alert}No model is configured, skipping...\n{alert.replace('[', '[/')}"
             )
             return
+        # reading model file list to get list of every model created
         with open("saves/custom/model-list.txt", "r") as file:
+            # If model file exist and person has only 1 length of data that means its \n
+            # which means there is no model created yet
             modellist = file.read().split("\n")
             if len(modellist) == 1:
                 rprint(
@@ -37,6 +43,7 @@ class createModel:
                 default=modellist[0],
                 choices=modellist,
             )
+            # printing the selected model configration
             with open(f"saves/custom/models/{selected}.txt", "r") as configuration:
                 conf = configuration.read()
                 conf = conf.split("\n\n")
@@ -55,12 +62,13 @@ class createModel:
                 )
 
     def NewModel():
+        # colors here
         normal = str(txt().search("normal", "saves/default/config.txt"))
         highlight = str(txt().search("highlight", "saves/default/config.txt"))
         alert = str(txt().search("alert", "saves/default/config.txt"))
         asciiart = str(txt().search("asciiart", "saves/default/config.txt"))
-        console = Prompt()
-
+        
+        
         aneki = f"""{asciiart}
                                 .d8b.  d8b   db d88888b db   dD d888888b                                 
                                d8' `8b 888o  88 88'     88 ,8P'   `88'                                   
@@ -68,8 +76,8 @@ class createModel:
                                88~~~88 88 V8o88 88~~~~~ 88`8b      88                                    
                                88   88 88  V888 88.     88 `88.   .88.                                   
                                YP   YP VP   V8P Y88888P YP   YD Y888888P                                 
-            
-                
+
+
  .o88b. db    db .d8888. d888888b  .d88b.  .88b  d88.        .88b  d88.  .d88b.  d8888b. d88888b db      
 d8P  Y8 88    88 88'  YP `~~88~~' .8P  Y8. 88'YbdP`88        88'YbdP`88 .8P  Y8. 88  `8D 88'     88      
 8P      88    88 `8bo.      88    88    88 88  88  88        88  88  88 88    88 88   88 88ooooo 88      
@@ -78,6 +86,8 @@ Y8b  d8 88b  d88 db   8D    88    `8b  d8' 88  88  88        88  88  88 `8b  d8'
  `Y88P' ~Y8888P' `8888Y'    YP     `Y88P'  YP  YP  YP        YP  YP  YP  `Y88P'  Y8888D' Y88888P Y88888P {asciiart.replace("[", "[/")}
         """
         rprint(aneki)
+
+
 
         rprint(
             f"\n\n{normal}Things to Know About Creating a {normal.replace('[', '[/')}{highlight}New Model{highlight.replace('[', '[/')}:"
@@ -170,7 +180,7 @@ Y8b  d8 88b  d88 db   8D    88    `8b  d8' 88  88  88        88  88  88 `8b  d8'
         try:
             ollama.create(model=name, modelfile=model_file)
             with open(f"saves/custom/models/{name}.txt", "w") as file:
-                file.write(model_file)
+                file.write("FROM " + model + "\n\n" + system + "\n\n" + "\n\n")
             with open("saves/custom/model-list.txt", "r") as modelslist:
                 rprint(
                     f"{normal}Checking if the model is already in the model list...{normal.replace('[', '[/')}"

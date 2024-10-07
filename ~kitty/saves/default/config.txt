@@ -2,4 +2,6 @@ asciiart = [yellow]         //ascii art color
 normal = [white]            //majority of color
 highlight = [blue]          //highlighted area's color
 alert = [red]               //alert's color
-asciiart_index = -1         // use -1 for random and other index for fixed asciiart
+asciiart_index = -1         //use -1 for random and other index for fixed asciiart
+height = 60                 //if you change height or width you must resize png from setup
+width = 60                  //this height and width are used for pixels_art emotions size
