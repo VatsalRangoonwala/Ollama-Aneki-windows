@@ -149,17 +149,17 @@ Y8b  d8 88b  d88 db   8D    88    `8b  d8' 88  88  88        88  88  88 `8b  d8'
                 "This approach keeps the conversation straightforward and easy to understand, even for users who may not be familiar with the topic."
             )
 
-        else:
-            emotion_mandatory = (
-                "You must begin every response with one emotion from this list: "
-                "'angry', 'confident', 'confused', 'curious', 'happy', 'nervous', 'normal', 'sad', or 'shy'. "
-                "Strictly format your response as '{emotion} - {response}', where {emotion} is from the list and {response} is your direct reply to the prompt. "
-                "Keep everything as normal, but add the required emotion at the start of the response. "
-                "Do not add any explanations, suggestions, or extra information unless directly asked. "
-                "If no question is asked, respond concisely in one sentence following the format. "
-                "For example: 'happy - How can I assist you today?' or 'confused - I'm not sure what you mean.' "
-                "Any response not in this format will be considered incorrect."
-            )
+        # else:
+            # emotion_mandatory = (
+            #     "You must begin every response with one emotion from this list: "
+            #     "'angry', 'confident', 'confused', 'curious', 'happy', 'nervous', 'normal', 'sad', or 'shy'. "
+            #     "Strictly format your response as '{emotion} - {response}', where {emotion} is from the list and {response} is your direct reply to the prompt. "
+            #     "Keep everything as normal, but add the required emotion at the start of the response. "
+            #     "Do not add any explanations, suggestions, or extra information unless directly asked. "
+            #     "If no question is asked, respond concisely in one sentence following the format. "
+            #     "For example: 'happy - How can I assist you today?' or 'confused - I'm not sure what you mean.' "
+            #     "Any response not in this format will be considered incorrect."
+            # )
 
         model_file = (
             "FROM " + model + "\n\n" + system + emotion_mandatory + "\n\n" + "\n\n"
