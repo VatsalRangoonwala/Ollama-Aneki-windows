@@ -3,9 +3,11 @@ from pathlib import Path
 from PIL import Image
 from rich import print as rprint
 
+from utility.richtables import Tables
+
 
 class pngPix:
-    def __init__(self, height, width, highlight, alert, normal):
+    def __init__(self, height, width, highlight, alert, normal, paths):
         self.height = height
         self.width = width
         self.highlight = highlight
@@ -13,18 +15,47 @@ class pngPix:
         self.normal = normal
         self.dLowResPath = "saves/default/lowres/"
         self.dHighResPath = "saves/default/exp/"
-        self.cLowResPath = "saves/custom/lowres/"
-        self.cHighResPath = "saves/custom/exp/"
+        self.cLowResPath = paths + "/lowres/"
+        self.cHighResPath = paths + "/exp/"
         self.emotions = [
+            "afraid",
+            "anger",
             "angry",
+            "annoyed",
+            "anticipating",
+            "anxious",
+            "apprehensive",
+            "ashamed",
+            "caring",
             "confident",
-            "confused",
-            "curious",
-            "happy",
-            "nervous",
-            "normal",
+            "content",
+            "devastated",
+            "disappointed",
+            "disgusted",
+            "embarrassed",
+            "excited",
+            "faithful",
+            "fear",
+            "furious",
+            "grateful",
+            "guilty",
+            "hopeful",
+            "impressed",
+            "jealous",
+            "joy",
+            "joyful",
+            "lonely",
+            "love",
+            "nostalgic",
+            "prepared",
+            "proud",
             "sad",
-            "shy",
+            "sadness",
+            "sentimental",
+            "surprise",
+            "surprised",
+            "terrified",
+            "trusting",
         ]
 
     def lower_resolution(self):
@@ -34,17 +65,15 @@ class pngPix:
         Path(self.cLowResPath).mkdir(parents=True, exist_ok=True)
         Path(self.dLowResPath).mkdir(parents=True, exist_ok=True)
         Path(self.cHighResPath).mkdir(parents=True, exist_ok=True)
-
+        text = "\n"
         try:
-            rprint(f"{self.normal}Searching for custom images...")
+            text += f"{self.normal}Searching for custom images...\n"
             # Chceking wherether every emotion exist or not
             # If it does not exist, the program will move to default
             for emotion in self.emotions:
                 image = Image.open(self.cHighResPath + emotion + ".png")
-            rprint(f"{self.alert}Custom images found...  ")
-            rprint(
-                f"{self.highlight}Converting custom images in {self.height}x{self.width}... "
-            )
+            text += f"{self.alert}Custom images found...  \n"
+            text += f"{self.highlight}Converting custom images in {self.height}x{self.width}... \n"
             for emotion in self.emotions:
                 # open image in high res
                 image = Image.open(self.cHighResPath + emotion + ".png")
@@ -54,10 +83,8 @@ class pngPix:
                 # save it
                 new_image.save(f"{self.cLowResPath}{emotion}.png")
         except:
-            rprint(f"{self.alert}NO custom images found...")
-            rprint(
-                f"{self.highlight}Converting default images in {self.height}x{self.width}..."
-            )
+            text += f"{self.alert}NO custom images found...\n"
+            text += f"{self.highlight}Converting default images in {self.height}x{self.width}...\n"
             for emotion in self.emotions:
                 # open image in high res
                 image = Image.open(self.dHighResPath + emotion + ".png")
@@ -66,3 +93,5 @@ class pngPix:
 
                 # save it
                 new_image.save(f"{self.dLowResPath}{emotion}.png")
+
+        Tables.normal_table(text)

@@ -1,0 +1,81 @@
+from rich import box
+from rich import print as rprint
+from rich.table import Table
+
+from utility.textSearch import txt
+
+
+def box_type():
+    if (txt.search("box_borders", "saves/default/config.txt")) == "HEAVY":
+        return box.HEAVY
+    elif (txt.search("box_borders", "saves/default/config.txt")) == "DOUBLE":
+        return box.DOUBLE
+    elif (txt.search("box_borders", "saves/default/config.txt")) == "ROUNDED":
+        return box.HEAVY
+    elif (txt.search("box_borders", "saves/default/config.txt")) == "SQUARE":
+        return box.SQUARE
+    else:
+        return box.SIMPLE
+
+
+class Tables:
+    def __init__(self):
+        pass
+
+    def center_table(text):
+        width = 0
+        if int(txt.search("box_width", "saves/default/config.txt")) == 0:
+
+            table = Table(show_header=False, safe_box=True, box=box_type(), expand=True)
+        else:
+            width = int(txt.search("box_width", "saves/default/config.txt"))
+            table = Table(
+                show_header=False,
+                safe_box=True,
+                box=box_type(),
+                width=width,
+            )
+        table.add_column("", justify="center", no_wrap=True)
+        table.add_row(text + "\n")
+        rprint(table)
+
+    def normal_table(text):
+        width = 0
+        if int(txt.search("box_width", "saves/default/config.txt")) == 0:
+
+            table = Table(show_header=False, safe_box=True, box=box_type(), expand=True)
+        else:
+            width = int(txt.search("box_width", "saves/default/config.txt"))
+            table = Table(
+                show_header=False,
+                safe_box=True,
+                box=box_type(),
+                width=width,
+            )
+        table.add_column("", no_wrap=False)
+        table.add_row(text)
+        rprint(table)
+
+    def multi_table(text):
+        width = 0
+
+        if int(txt.search("box_width", "saves/default/config.txt")) == 0:
+            tb = Table(show_footer=False, safe_box=True, box=None, expand=True)
+        else:
+            width = int(txt.search("box_width", "saves/default/config.txt"))
+            tb = Table(
+                show_footer=False,
+                safe_box=True,
+                box=None,
+                width=width,
+            )
+
+        for i in text:
+            table = None
+            table = Table(show_header=True, safe_box=True, box=box_type(), expand=True)
+            table.add_column(i[0], no_wrap=False, ratio=1, justify="center")
+            for j in i[1:]:
+                table.add_row(j)
+            tb.add_column(table, ratio=1, justify="center", no_wrap=False)
+
+        rprint(tb)

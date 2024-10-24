@@ -1,5 +1,5 @@
 class txt:
-    def search(self, text, path):
+    def search(text, path):
         with open(path, "r") as txt:
             try:
                 testlist = txt.readlines()

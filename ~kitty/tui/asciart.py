@@ -3,21 +3,20 @@ import random
 
 class asciiArt:
 
-    def LoadArt(index):
+    def LoadArt(index, path):
         Ascii_Art = []
-        path = ""
+        path = path + "/art.txt"
         try:
-            with open("saves/custom/art.txt", "r") as file:
-                Ascii_Art = file.read().split("\n\n\n")
-            # print("Custom Ascii art detected, loading one art ranomally...")
+            with open(path, "r") as file:
+                Ascii_Art = file.read().split("\n\n\n\n")
         except:
             with open("saves/default/art.txt", "r") as file:
-                Ascii_Art = file.read().split("\n\n\n")
-            # print("Only default Ascii art is detected, loading one art ranomally...")
+                Ascii_Art = file.read().split("\n\n\n\n")
+                
 
         # will return rencomly
         if index < 0:
-            return Ascii_Art[random.randint(0, len(Ascii_Art) - 2)]
+            return Ascii_Art[random.randint(0, len(Ascii_Art)-2)]
 
         # will return as indexed
         else:
