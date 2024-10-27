@@ -1,10 +1,13 @@
+import subprocess
+import sys
+
 from rich import print as rprint
 from rich.prompt import Prompt
-from rich.table import Table
 
-from model import createModel
 from tui.asciart import asciiArt
 from tui.pngpixel import pngPix
+from utility.ascimerge import AsciiMerge
+from utility.model import createModel
 from utility.richtables import Tables
 from utility.textSearch import txt
 
@@ -14,7 +17,7 @@ highlight = txt.search("highlight", "saves/default/config.txt")
 alert = txt.search("alert", "saves/default/config.txt")
 user = ""
 
-
+subprocess.run(["clear"])
 Tables.center_table(
     asciiart
     + asciiArt.LoadArt(
@@ -22,19 +25,38 @@ Tables.center_table(
         txt.search("custom_path", "saves/default/config.txt"),
     )
 )
-
+print("\n")
+flag = True
 while user != "exit":
-    user = Prompt.ask(
-        "",
-        default="pixelize",
-        choices=["run", "help", "exit", "new", "history", "pixelize"],
-    )
+    try:
+        if flag and sys.argv[1] in [
+            "run",
+            "help",
+            "exit",
+            "new",
+            "history",
+            "asciiart",
+            "pixelize",
+        ]:
+            user = sys.argv[1]
+            flag = False
+        else:
+            raise
+    except:
+        flag = False
+        user = Prompt.ask(
+            "",
+            default="new",
+            choices=["new", "history", "run", "pixelize", "asciiart", "help", "exit"],
+        )
+
+    subprocess.run(["clear"])
     if user == "run":
         print("Running...")
     elif user == "help":
         text = []
         rprint(
-            f"{normal}\nWelcome to the help section! Here’s a brief overview of the commands available:{normal.replace('[', '[/')} "
+            f"{normal}Welcome to the help section! Here’s a brief overview of the commands available:{normal.replace('[', '[/')} "
         )
         text = [
             [
@@ -67,12 +89,17 @@ while user != "exit":
                 "Replace files with the same name.",
                 f"{alert}Improper changes may cause issues!{alert.replace('[', '[/')}",
             ],
+            [
+                f"{highlight}asciiart{highlight.replace('[', '[/')}",
+                "Merge two ASCII arts.",
+                "To saperate two ascii use enters three times.",
+                f"{alert}Only ascii1.txt allows multiple art!{alert.replace('[', '[/')}",
+            ],
         ]
         Tables.multi_table(text)
-        rprint(
-            f"{normal}Feel free to ask for help anytime!{normal.replace('[', '[/')}"
-        )
-
+        rprint(f"{normal}Feel free to ask for help anytime!{normal.replace('[', '[/')}")
+    elif user == "asciiart":
+        AsciiMerge.merge()
     elif user == "exit":
         print("Exiting...")
     elif user == "new":
