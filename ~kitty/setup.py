@@ -11,13 +11,15 @@ from utility.model import createModel
 from utility.richtables import Tables
 from utility.textSearch import txt
 
+auto_clear = bool((int(txt.search("auto_clear", "saves/default/config.txt"))))
+
 asciiart = txt.search("asciiart", "saves/default/config.txt")
 normal = txt.search("normal", "saves/default/config.txt")
 highlight = txt.search("highlight", "saves/default/config.txt")
 alert = txt.search("alert", "saves/default/config.txt")
 user = ""
-
-subprocess.run(["clear"])
+if auto_clear:
+    subprocess.run(["clear"])
 Tables.center_table(
     asciiart
     + asciiArt.LoadArt(
@@ -50,7 +52,8 @@ while user != "exit":
             choices=["new", "history", "run", "pixelize", "asciiart", "help", "exit"],
         )
 
-    subprocess.run(["clear"])
+    if auto_clear:
+        subprocess.run(["clear"])
     if user == "run":
         print("Running...")
     elif user == "help":
