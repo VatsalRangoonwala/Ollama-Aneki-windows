@@ -46,4 +46,3 @@ model = ModelCatalog().load_model("slim-emotions-tool")
 for l in ls:
     response = model.function_call(l)
     print(str(ls.index(l)) + " " + l + "  " + (response["llm_response"]["emotions"][0]))
-
