@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import ollama
@@ -81,8 +82,8 @@ class createModel:
         text += f"\n{normal}Things to Know About Creating a {normal.replace('[', '[/')}{highlight}New Model{highlight.replace('[', '[/')}:"
         text += f"\n{normal}1. Download your model from Ollama {normal.replace('[', '[/')}{highlight}(like Llama or Phi){highlight.replace('[', '[/')}."
         text += f"\n{alert}2. Creating a new model won’t erase your current one (unless the names are the same)."
-        text += f"\n{normal}3. It will use less memory than what you have now."
-        text += f"\n{alert}4. Adding up to 10-12 rules won’t slow things down. We're checking 2 rules right now.\n\n"
+        text += f"\n{normal}3. It will use not duplicate the model instead it will use the existing model. Hence memory will be saved."
+        text += f"\n{alert}4. Behavior of model is adviced to keep simple\n\n"
 
         #   In model you sepcifie your predonwloaded model like mistral phi3.5 ollama3.2 etc
         model = Prompt().ask("Name of the existing model ", default="phi3.5")
@@ -95,10 +96,22 @@ class createModel:
         system = "SYSTEM " + Prompt().ask(
             "Set behavior of model ",
             default=(
-                f"from now on, you are a smart otaku with coding skills named {name.capitalize()} who speaks in English. The tone of your text allows to judge emotion you feel"
-                "You are polite, soft-spoken, and your responses must be short and to the point."
+                f"from now on, you are a smart otaku with coding skills named {name.capitalize()} who speaks in English. The tone of your text allows to judge emotion you feel You are polite, soft-spoken, and your responses must be short and to the point."
             ),
         )
+        info = ""
+        if (
+            Prompt().ask(
+                f"Do you want to add something to {name}/'s memory ",
+                default="yes",
+                choices=["yes", "no"],
+            )
+            != "no"
+        ):
+            info = Prompt().ask(
+                f"Things to be memorized by {name}",
+                default="I am an Otaku. My birthday is on 14th feb.My name is megh",
+            )
 
         model_file = "FROM " + model + "\n\n" + system + "\n\n" + "\n\n"
 
@@ -119,8 +132,22 @@ class createModel:
             ollama.create(model=name, modelfile=model_file)
             with open(custom + f"/models/{name}.txt", "w") as file:
                 file.write("FROM " + model + "\n\n" + system + "\n\n" + "\n\n")
+            with open(custom + f"/models/{name}.json", "w") as file:
+                json.dump(
+                    (
+                        {
+                            "role": "user",
+                            "content": info,
+                        },
+                        {
+                            "role": "assistant",
+                            "content": "I have memorized it...",
+                        },
+                    ),
+                    file,
+                )
             with open(custom + "/model-list.txt", "r") as modelslist:
-                text += f"{normal}Checking if the model is already in the model list...{normal.replace('[', '[/')}"
+                text += f"\n{normal}Checking if the model is already in the model list...{normal.replace('[', '[/')}"
                 modellist = modelslist.read()
                 try:
                     modellist = modellist.split("\n").index(name)
@@ -131,10 +158,10 @@ class createModel:
                     with open(custom + "/model-list.txt", "w") as newlist:
                         newlist.write(modellist + name + "\n")
             text += (
-                f"\n{highlight}{name} has been created!{highlight.replace('[', '[/')}"
+                f"\n{highlight}{name} has been created!{highlight.replace('[', '[/')}\n"
             )
         except Exception as error:
             text += f"\n{alert}{error}{alert.replace('[', '[/')}"
-            text += f"\n{alert}Something went wrong. Please check for any typos in the model name and verify if you have downloaded the model.{alert.replace('[', '[/')}"
+            text += f"\n{alert}Something went wrong. Please check for any typos in the model name and verify if you have downloaded the model.{alert.replace('[', '[/')}\n"
 
         Tables.normal_table(text)

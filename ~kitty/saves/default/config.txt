@@ -11,3 +11,5 @@ asciis1_path = saves/default/ascii1.txt         //list will be created three ent
 ascii2_path = saves/default/ascii2.txt          //considered as single string
 box_width = 0                                   //0 for maximum available width of terminal or an integer for desired width
 auto_clear = 1                                  //0 for desabling auto_clear to clear console screen else an integer to enable
+emotion_generation = 1                          //0 for desabling emotion in table else 1 for enabling it
+memory_length = 10                              //How much do you want your model to remember the conversation higher the number slower it may become

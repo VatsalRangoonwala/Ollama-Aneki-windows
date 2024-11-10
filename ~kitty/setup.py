@@ -4,6 +4,7 @@ import sys
 from rich import print as rprint
 from rich.prompt import Prompt
 
+from run import RunModel
 from tui.asciart import asciiArt
 from tui.pngpixel import pngPix
 from utility.ascimerge import AsciiMerge
@@ -55,7 +56,7 @@ while user != "exit":
     if auto_clear:
         subprocess.run(["clear"])
     if user == "run":
-        print("Running...")
+        RunModel.new_run(Prompt.ask("Model Name: ", default="aneki"))
     elif user == "help":
         text = []
         rprint(
@@ -109,7 +110,6 @@ while user != "exit":
         createModel.NewModel()
     elif user == "history":
         createModel.History()
-
     elif user == "pixelize":
         cls = pngPix(
             height=int(txt.search("height", "saves/default/config.txt")),
