@@ -1,0 +1,18 @@
+[
+  {
+    "role": "user",
+    "content": "Here are some info for you to memorized. I am an Otaku. My birthday is on 14th feb.My name is megh. The current time is 2024-11-11 19:55:59.092503"
+  },
+  {
+    "role": "assistant",
+    "content": "I have memorized it..."
+  },
+  {
+    "role": "user",
+    "content": ""
+  },
+  {
+    "role": "assistant",
+    "content": "grateful.Acknowledged, Megh here - Otaku by nature and birthday on February 14th. The current timestamp is November 11th, 2024, at 7:55 PM precisely (down to the microsecond). Thank you for sharing my details!"
+  }
+]

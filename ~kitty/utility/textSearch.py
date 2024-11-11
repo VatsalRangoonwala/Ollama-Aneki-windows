@@ -1,3 +1,6 @@
+from rich_pixels import Pixels
+
+
 class txt:
     def search(text, path):
         with open(path, "r") as txt:
@@ -13,3 +16,9 @@ class txt:
             except ValueError:
                 print(f"Something({text}) is missing from {path}")
                 raise ValueError
+
+    def search_image(emotion, custom_path):
+        try:
+            return Pixels.from_image_path(custom_path + f"/lowres/{emotion}.png")
+        except:
+            return Pixels.from_image_path("saves/default" + f"/lowres/{emotion}.png")

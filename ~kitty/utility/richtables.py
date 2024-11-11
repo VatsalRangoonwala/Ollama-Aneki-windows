@@ -79,3 +79,32 @@ class Tables:
             tb.add_column(table, ratio=1, justify="center", no_wrap=False)
 
         rprint(tb)
+
+    def table_with_emotion(text, emotion):
+        width = 0
+        if int(txt.search("box_width", "saves/default/config.txt")) == 0:
+            table = Table(show_header=False, safe_box=True, box=box_type(), expand=True)
+        else:
+            width = int(txt.search("box_width", "saves/default/config.txt"))
+
+            table = Table(
+                show_header=False,
+                safe_box=True,
+                box=box_type(),
+                width=width,
+            )
+
+        table.add_column(
+            "emotion",
+            width=60,
+            overflow="fold",
+            no_wrap=True,
+            justify="left",
+            vertical="middle",
+        )
+        table.add_column(
+            "text", vertical="middle", no_wrap=False, justify="left", ratio=1
+        )
+        table.add_row(emotion, txt.search("normal", "saves/default/config.txt") + text)
+
+        return table
