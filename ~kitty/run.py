@@ -13,12 +13,6 @@ class RunModel:
 
     def new_run(model_name):
 
-        def length_ret(leng, hist):
-            if leng < len(hist):
-                return hist[(len(hist) - leng) :]
-            else:
-                return hist
-
         model = ModelCatalog().load_model("slim-emotions-tool")
         now = str(datetime.datetime.now())
         custom = txt.search("custom_path", "saves/default/config.txt")
@@ -31,6 +25,19 @@ class RunModel:
         with open(custom + f"/models/{model_name}.json", "r") as file:
             memory = json.load(file)
             memory[0]["content"] += ". The current time is " + now
+            print(type(memory))
+
+            def length_ret(leng, hist):
+                if leng < len(hist):
+                    hist = hist[(len(hist) - leng) + 1 :]
+                    new_hist = memory
+                    for h in hist:
+                        new_hist.append(h)
+                    print(new_hist)
+                    return new_hist
+                else:
+                    return hist
+
             history = []
             history.append(memory[0])
             history.append(memory[1])
@@ -68,7 +75,12 @@ class RunModel:
                             msg, txt.search_image(response, custom)
                         )
                     )
-                history.append({"role": "assistant", "content": response + "." + msg})
+                history.append(
+                    {
+                        "role": "assistant",
+                        "content": msg + "PleaseIgnoreThis" + response,
+                    }
+                )
 
                 with open(custom + f"/history/{model_name}-{now}.json", "w") as chats:
                     json.dump(history, chats, indent=2)

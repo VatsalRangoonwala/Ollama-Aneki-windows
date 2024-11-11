@@ -1,0 +1,26 @@
+[
+  {
+    "role": "user",
+    "content": "Here are some info for you to memorized. I am an Otaku. My birthday is on 14th feb.My name is megh. The current time is 2024-11-11 20:47:15.448922"
+  },
+  {
+    "role": "assistant",
+    "content": "I have memorized it..."
+  },
+  {
+    "role": "user",
+    "content": "hadshsahdasd"
+  },
+  {
+    "role": "assistant",
+    "content": "It seems like the input may be garbled or nonsensical text (\"hadshsahdasd\"). I'm Phi, an AI language model. However, if you need assistance with a particular topic or question, please provide clear and relevant details so that I can help accordingly!PleaseIgnoreThisannoyed"
+  },
+  {
+    "role": "user",
+    "content": "jhgashdj"
+  },
+  {
+    "role": "assistant",
+    "content": "It appears the text input (\"jhgashdj\") is garbled or nonsensical. As Phi, I'm here to assist you with any questions or topics within my knowledge capabilities. Please provide a clear and relevant question for me to help answer!SorryIfIMissedThispointLackOfUnderstandingPleaseIgnoreThisannoyed"
+  }
+]

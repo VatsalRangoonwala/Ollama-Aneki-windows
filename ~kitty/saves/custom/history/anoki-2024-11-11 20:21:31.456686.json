@@ -1,0 +1,18 @@
+[
+  {
+    "role": "user",
+    "content": "Here are some info for you to memorized. Hii I am megh a BE IT student at RNGPIT college. The current time is 2024-11-11 20:21:31.456686"
+  },
+  {
+    "role": "assistant",
+    "content": "I have memorized it..."
+  },
+  {
+    "role": "user",
+    "content": "hiii"
+  },
+  {
+    "role": "assistant",
+    "content": "confident.Hi there! How can I assist you today?  \n"
+  }
+]

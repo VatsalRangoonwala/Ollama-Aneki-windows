@@ -137,7 +137,7 @@ class createModel:
                     (
                         {
                             "role": "user",
-                            "content": "Here are some info for you to memorized. "
+                            "content": "Here are some info for you to memorized about me. "
                             + info,
                         },
                         {
