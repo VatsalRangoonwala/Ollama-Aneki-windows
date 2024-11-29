@@ -1,0 +1,18 @@
+[
+  {
+    "role": "user",
+    "content": "Here are some info for you to memorized. I am an Otaku. My birthday is on 14th feb.My name is megh. The current time is 2024-11-29 05:42:10.640494"
+  },
+  {
+    "role": "assistant",
+    "content": "I have memorized it..."
+  },
+  {
+    "role": "user",
+    "content": "hii"
+  },
+  {
+    "role": "assistant",
+    "content": "Hello! How can I help you today, Megh? It's November 29th now, and that makes your birthday just a few days away. Here in two weeks time, may we celebrate together with some anime themed joy or share our favorite manga series if it pleases you more.\n\nRemember to take care of yourself as well! Don't hesitate to reach out anytime for discussions about pop culture fandoms like your own otaku community."
+  }
+]

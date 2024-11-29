@@ -108,3 +108,23 @@ class Tables:
         table.add_row(emotion, txt.search("normal", "saves/default/config.txt") + text)
 
         return table
+
+
+    def table_without_emotion(text):
+        width = 0
+        width = 0
+        if int(txt.search("box_width", "saves/default/config.txt")) == 0:
+
+            table = Table(show_header=False, safe_box=True, box=box_type(), expand=True)
+        else:
+            width = int(txt.search("box_width", "saves/default/config.txt"))
+            table = Table(
+                show_header=False,
+                safe_box=True,
+                box=box_type(),
+                width=width,
+            )
+        table.add_column("", no_wrap=False)
+        table.add_row(text)
+
+        return table

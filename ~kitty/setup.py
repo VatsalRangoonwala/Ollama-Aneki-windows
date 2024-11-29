@@ -56,8 +56,19 @@ while user != "exit":
     if auto_clear:
         subprocess.run(["clear"])
     if user == "run":
-        available_model = open("saves/custom/model-list.txt","r").read().split("\n")[:-1]
-        RunModel.new_run(Prompt.ask("Model Name: ", default=available_model[0] ,choices=available_model))
+        try:
+            available_model = (
+                open("saves/custom/model-list.txt", "r").read().split("\n")[:-1]
+            )
+            RunModel.new_run(
+                Prompt.ask(
+                    "Model Name: ", default=available_model[0], choices=available_model
+                )
+            )
+        except:
+            rprint(
+                f"{alert}No custome model found! Please create custome model using{alert.replace('[', '[/')} {highlight}'new'{highlight.replace('[', '[/')} {alert} command first!{alert.replace('[', '[/')}"
+            )
     elif user == "help":
         text = []
         rprint(
