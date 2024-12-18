@@ -15,4 +15,5 @@ emotion_generation = 1                          //0 for desabling emotion in tab
 memory_length = 10                              //How much do you want your model to remember the conversation higher the number slower it may become
 frequency = 100                                 //per x (frequency) numbers of alplabets a emotion regenration will be triggered
 max_respose_size = 500                          //If the total numbers of alphabets in response is bigger than given size than it will not trigger emotion regenration
-ask_for_Topic = 1                               //if its 1 than whenever you do run it will ask for topic name else it will save history with the name based on date and time.
+ask_for_Topic = 0                               //if its 1 than whenever you do run it will ask for topic name else it will save history with the name based on date and time.
+user_conversation = >>                          //Its a string which will be shown whenever user replies.

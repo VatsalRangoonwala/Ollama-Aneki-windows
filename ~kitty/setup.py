@@ -56,19 +56,91 @@ while user != "exit":
     if auto_clear:
         subprocess.run(["clear"])
     if user == "run":
-        try:
-            available_model = (
-                open("saves/custom/model-list.txt", "r").read().split("\n")[:-1]
-            )
-            RunModel.new_run(
-                Prompt.ask(
-                    "Model Name: ", default=available_model[0], choices=available_model
+            history = True
+        # try:
+        #     open(
+        #         txt.search("custom_path", "saves/default/config.txt")
+        #         + "/historylog.txt",
+        #         "r",
+        #     ).read().split("\n")[:-1]
+
+        # except:
+            # history = False
+
+            def call_fun(mode):
+                if mode == "read" or mode == "cont":
+                    logs = (
+                        open(
+                            txt.search("custom_path", "saves/default/config.txt")
+                            + "/historylog.txt",
+                            "r",
+                        )
+                        .read()
+                        .split("\n")[:-1]
+                    )
+
+                    logs = Prompt.ask(
+                        "Save history with name: ", default=logs[0], choices=logs
+                    )
+                    runmodel = RunModel()
+                    if mode == "read":
+                        runmodel.read(logs)
+                    else:
+                        runmodel.ConinueFromWhereItLeft(logs)
+                else:
+                    runmodel.new_run(mode)
+
+        # try:
+            available_option = (
+                open(
+                    txt.search("custom_path", "saves/default/config.txt")
+                    + "/model-list.txt",
+                    "r",
                 )
+                .read()
+                .split("\n")[:-1]
             )
-        except:
-            rprint(
-                f"{alert}No custome model found! Please create custome model using{alert.replace('[', '[/')} {highlight}'new'{highlight.replace('[', '[/')} {alert} command first!{alert.replace('[', '[/')}"
-            )
+            if history:
+                available_option.append("read")
+                available_option.append("cont")
+            if sys.argv[2] in available_option:
+                mode = sys.argv[2]
+                call_fun(mode)
+        #     else:
+        #         raise
+        # except:
+        #     try:
+        #         available_option = (
+        #             open(
+        #                 txt.search("custom_path", "saves/default/config.txt")
+        #                 + "/model-list.txt",
+        #                 "r",
+        #             )
+        #             .read()
+        #             .split("\n")[:-1]
+        #         )
+        #         if history:
+        #             available_option.append("read")
+        #             available_option.append("cont")
+        #         mode = Prompt.ask(
+        #             "Model Name: ",
+        #             default=(
+        #                 open(
+        #                     txt.search("custom_path", "saves/default/config.txt")
+        #                     + "/model-list.txt",
+        #                     "r",
+        #                 )
+        #                 .read()
+        #                 .split("\n")[:-1]
+        #             )[0],
+        #             choices=available_option,
+        #         )
+        #         call_fun(mode)
+        #     except:
+        #         rprint(
+        #             f"{alert}No custome model found! Please create custome model using{alert.replace('[', '[/')} {highlight}'new'{highlight.replace('[', '[/')} {alert} command first!{alert.replace('[', '[/')}"
+        #         )
+
     elif user == "help":
         text = []
         rprint(
