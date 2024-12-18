@@ -56,16 +56,16 @@ while user != "exit":
     if auto_clear:
         subprocess.run(["clear"])
     if user == "run":
-            history = True
-        # try:
-        #     open(
-        #         txt.search("custom_path", "saves/default/config.txt")
-        #         + "/historylog.txt",
-        #         "r",
-        #     ).read().split("\n")[:-1]
+        history = True
+        try:
+            open(
+                txt.search("custom_path", "saves/default/config.txt")
+                + "/historylog.txt",
+                "r",
+            ).read().split("\n")[:-1]
 
-        # except:
-            # history = False
+        except:
+            history = False
 
             def call_fun(mode):
                 if mode == "read" or mode == "cont":
@@ -90,7 +90,7 @@ while user != "exit":
                 else:
                     runmodel.new_run(mode)
 
-        # try:
+        try:
             available_option = (
                 open(
                     txt.search("custom_path", "saves/default/config.txt")
@@ -106,40 +106,40 @@ while user != "exit":
             if sys.argv[2] in available_option:
                 mode = sys.argv[2]
                 call_fun(mode)
-        #     else:
-        #         raise
-        # except:
-        #     try:
-        #         available_option = (
-        #             open(
-        #                 txt.search("custom_path", "saves/default/config.txt")
-        #                 + "/model-list.txt",
-        #                 "r",
-        #             )
-        #             .read()
-        #             .split("\n")[:-1]
-        #         )
-        #         if history:
-        #             available_option.append("read")
-        #             available_option.append("cont")
-        #         mode = Prompt.ask(
-        #             "Model Name: ",
-        #             default=(
-        #                 open(
-        #                     txt.search("custom_path", "saves/default/config.txt")
-        #                     + "/model-list.txt",
-        #                     "r",
-        #                 )
-        #                 .read()
-        #                 .split("\n")[:-1]
-        #             )[0],
-        #             choices=available_option,
-        #         )
-        #         call_fun(mode)
-        #     except:
-        #         rprint(
-        #             f"{alert}No custome model found! Please create custome model using{alert.replace('[', '[/')} {highlight}'new'{highlight.replace('[', '[/')} {alert} command first!{alert.replace('[', '[/')}"
-        #         )
+            else:
+                raise
+        except:
+            try:
+                available_option = (
+                    open(
+                        txt.search("custom_path", "saves/default/config.txt")
+                        + "/model-list.txt",
+                        "r",
+                    )
+                    .read()
+                    .split("\n")[:-1]
+                )
+                if history:
+                    available_option.append("read")
+                    available_option.append("cont")
+                mode = Prompt.ask(
+                    "Model Name: ",
+                    default=(
+                        open(
+                            txt.search("custom_path", "saves/default/config.txt")
+                            + "/model-list.txt",
+                            "r",
+                        )
+                        .read()
+                        .split("\n")[:-1]
+                    )[0],
+                    choices=available_option,
+                )
+                call_fun(mode)
+            except:
+                rprint(
+                    f"{alert}No custome model found! Please create custome model using{alert.replace('[', '[/')} {highlight}'new'{highlight.replace('[', '[/')} {alert} command first!{alert.replace('[', '[/')}"
+                )
 
     elif user == "help":
         text = []
