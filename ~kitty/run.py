@@ -2,10 +2,10 @@ import datetime
 import json
 import subprocess
 from pathlib import Path
-from rich import print as rprint
 
 import ollama
 from llmware.models import ModelCatalog
+from rich import print as rprint
 from rich.live import Live
 from rich.prompt import Prompt
 from rich.table import Table
@@ -70,6 +70,7 @@ class RunModel:
             .split("\n")[:-1],
         )
         memory_list = []
+        emotionlist = []
         with open(cpath + f"/models/{model_name}.json", "r") as file:
             memory_list = json.load(file)
             memory_list[0]["content"] += ". The current time is " + now
@@ -109,14 +110,16 @@ class RunModel:
                     "r",
                 ) as emotionlist:
                     emotionlist = json.load(emotionlist)
+                    emotionlist=emotionlist[:indexs]
                     with open(
                         cpath + "/history/" + logs + "-emotions.json",
                         "w",
                     ) as emotion:
-                        json.dump(emotionlist[:indexs], emotion, indent=2)
+                    
+                        json.dump(emotionlist, emotion, indent=2)
             except:
                 pass
-        self.read(logs)
+
         max_respose_size = int(
             txt.search("max_respose_size", "saves/default/config.txt")
         )
@@ -140,8 +143,11 @@ class RunModel:
 
             history = memory_list
             if int(txt.search("emotion_generation", "saves/default/config.txt")) >= 1:
-                emotions = []
+                emotions = emotionlist
                 model = ModelCatalog().load_model("slim-emotions-tool")
+                if int(txt.search("auto_clear", "saves/default/config.txt")) >= 1:
+                    subprocess.run(["clear"])
+                    self.read(logs)
                 user_input = input("\n" + user_conversation + " ")
                 while user_input.lower() != "exit":
                     history.append({"role": "user", "content": user_input})
@@ -188,8 +194,15 @@ class RunModel:
                     with open(cpath + f"/history/{logs}.json", "w") as chats:
                         json.dump(history, chats, indent=2)
 
+                    if (
+                        int(txt.search("reprint_everytime", "saves/default/config.txt"))
+                        >= 1
+                    ):
+                        subprocess.run(["clear"])
+                        self.read(logs)
                     user_input = input("\n" + user_conversation + " ")
             else:
+                self.read(logs)
                 user_input = input("\n" + user_conversation + " ")
                 while user_input.lower() != "exit":
                     history.append({"role": "user", "content": user_input})
@@ -211,7 +224,12 @@ class RunModel:
                     )
                     with open(cpath + f"/history/{logs}.json", "w") as chats:
                         json.dump(history, chats, indent=2)
-
+                    if (
+                        int(txt.search("reprint_everytime", "saves/default/config.txt"))
+                        >= 1
+                    ):
+                        subprocess.run(["clear"])
+                        self.read(logs)
                     user_input = input("\n" + user_conversation + " ")
 
     def new_run(model_name):
@@ -257,7 +275,8 @@ class RunModel:
             if int(txt.search("emotion_generation", "saves/default/config.txt")) >= 1:
                 emotions = []
                 model = ModelCatalog().load_model("slim-emotions-tool")
-                subprocess.run(["clear"])
+                if int(txt.search("auto_clear", "saves/default/config.txt")) >= 1:
+                    subprocess.run(["clear"])
                 user_input = input("\n" + user_conversation + " ")
                 while user_input.lower() != "exit":
                     history.append({"role": "user", "content": user_input})

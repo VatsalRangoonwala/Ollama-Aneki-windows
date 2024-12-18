@@ -67,28 +67,27 @@ while user != "exit":
         except:
             history = False
 
-            def call_fun(mode):
-                if mode == "read" or mode == "cont":
-                    logs = (
-                        open(
-                            txt.search("custom_path", "saves/default/config.txt")
-                            + "/historylog.txt",
-                            "r",
-                        )
-                        .read()
-                        .split("\n")[:-1]
+        def call_fun(mode):
+            if mode == "read" or mode == "cont":
+                logs = (
+                    open(
+                        txt.search("custom_path", "saves/default/config.txt")
+                        + "/historylog.txt",
+                        "r",
                     )
-
-                    logs = Prompt.ask(
-                        "Save history with name: ", default=logs[0], choices=logs
-                    )
-                    runmodel = RunModel()
-                    if mode == "read":
-                        runmodel.read(logs)
-                    else:
-                        runmodel.ConinueFromWhereItLeft(logs)
+                    .read()
+                    .split("\n")[:-1]
+                )
+                logs = Prompt.ask(
+                    "Save history with name: ", default=logs[0], choices=logs
+                )
+                runmodel=RunModel()
+                if mode == "read":
+                    runmodel.read(logs)
                 else:
-                    runmodel.new_run(mode)
+                    runmodel.ConinueFromWhereItLeft(logs)
+            else:
+                RunModel.new_run(mode)
 
         try:
             available_option = (
@@ -106,6 +105,7 @@ while user != "exit":
             if sys.argv[2] in available_option:
                 mode = sys.argv[2]
                 call_fun(mode)
+                sys.argv[2] = ""
             else:
                 raise
         except:
