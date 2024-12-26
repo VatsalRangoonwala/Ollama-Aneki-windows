@@ -96,7 +96,7 @@ class Tables:
 
         table.add_column(
             "emotion",
-            width=60,
+            width=int(txt.search("width", "saves/default/config.txt")),
             overflow="fold",
             no_wrap=True,
             justify="left",

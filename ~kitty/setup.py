@@ -68,6 +68,7 @@ while user != "exit":
             history = False
 
         def call_fun(mode):
+            runmodel = RunModel()
             if mode == "read" or mode == "cont":
                 logs = (
                     open(
@@ -81,13 +82,12 @@ while user != "exit":
                 logs = Prompt.ask(
                     "Save history with name: ", default=logs[0], choices=logs
                 )
-                runmodel=RunModel()
                 if mode == "read":
                     runmodel.read(logs)
                 else:
                     runmodel.ConinueFromWhereItLeft(logs)
             else:
-                RunModel.new_run(mode)
+                runmodel.new_run(mode)
 
         try:
             available_option = (

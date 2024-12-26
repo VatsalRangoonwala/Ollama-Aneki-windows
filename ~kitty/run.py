@@ -110,12 +110,12 @@ class RunModel:
                     "r",
                 ) as emotionlist:
                     emotionlist = json.load(emotionlist)
-                    emotionlist=emotionlist[:indexs]
+                    emotionlist = emotionlist[:indexs]
                     with open(
                         cpath + "/history/" + logs + "-emotions.json",
                         "w",
                     ) as emotion:
-                    
+
                         json.dump(emotionlist, emotion, indent=2)
             except:
                 pass
@@ -232,7 +232,7 @@ class RunModel:
                         self.read(logs)
                     user_input = input("\n" + user_conversation + " ")
 
-    def new_run(model_name):
+    def new_run(self, model_name):
         now = str(datetime.datetime.now())
         custom = txt.search("custom_path", "saves/default/config.txt")
         user_conversation = txt.search("user_conversation", "saves/default/config.txt")
@@ -333,11 +333,31 @@ class RunModel:
                             custom + f"/history/{model_name}-{Topic}.json", "w"
                         ) as chats:
                             json.dump(history, chats, indent=2)
+                        if (
+                            int(
+                                txt.search(
+                                    "reprint_everytime", "saves/default/config.txt"
+                                )
+                            )
+                            >= 1
+                        ):
+                            subprocess.run(["clear"])
+                            self.read(Topic)
                     else:
                         with open(
                             custom + f"/history/{model_name}-{now}.json", "w"
                         ) as chats:
                             json.dump(history, chats, indent=2)
+                        if (
+                            int(
+                                txt.search(
+                                    "reprint_everytime", "saves/default/config.txt"
+                                )
+                            )
+                            >= 1
+                        ):
+                            subprocess.run(["clear"])
+                            self.read(f"{model_name}-{now}")
 
                     user_input = input("\n" + user_conversation + " ")
             else:
