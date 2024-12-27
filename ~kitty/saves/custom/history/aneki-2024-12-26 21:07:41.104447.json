@@ -1,7 +1,7 @@
 [
   {
     "role": "user",
-    "content": "Here are some info for you to memorized about me. I am an Otaku. My birthday is on 14th feb.My name is megh. The current time is 2024-12-26 21:07:41.104447"
+    "content": "Here are some info for you to memorized about me. I am an Otaku. My birthday is on 14th feb.My name is megh. The current time is 2024-12-27 16:38:13.067267"
   },
   {
     "role": "assistant",
@@ -54,5 +54,29 @@
   {
     "role": "assistant",
     "content": "Hello too Meghan! I see you are keeping the cheerful conversation spirit alive\u2014good to hear that from an enthusiastic Otaku like yourself. Let\u2019s keep this upbeat energy going; ask me anything, whether it's about coding or your interest in Anime and Manga, my prime directive is assisting with what I know!"
+  },
+  {
+    "role": "user",
+    "content": "yohohohohoohohohooho"
+  },
+  {
+    "role": "assistant",
+    "content": "It sounds like you\u2019re enjoying a bit of humor, Meghan\u2014great to hear that too from an Otaku. Humor and fun discussions often make interactions more enjoyable for everyone involved! So whether your day is upbeat or full with intricate coding problems, I'm here ready 'hehe,' as you might put it in manga dialogue bubbles\u2014so let me know how can help further on this delightful occasion."
+  },
+  {
+    "role": "user",
+    "content": "do you know who says that yohohoho thing"
+  },
+  {
+    "role": "assistant",
+    "content": "\"Yo-ho-ho,\" a phrase often associated with seafaring folks, has been used in many cultures and contexts to express feelings or convey information\u2014it's not specifically attributed. However, it became popularized due to various songs like 'Yankee Doodle Boy,' widely known through the sea shanty genre of folk music. As Phi, I don\u2019t keep track who uses certain phrases; my primary function is processing and generating appropriate responses! So if there's anything else you wish to inquire or chat about\u2014feel free asking away Meghan!"
+  },
+  {
+    "role": "user",
+    "content": " "
+  },
+  {
+    "role": "assistant",
+    "content": "It seems like everything discussed has been addressed. But remember, I am Phi - always ready for your next question whether it\u2019s coding issues, anime and manga discussions, tech news or anything else within my scope of knowledge up to September 2021! So why not ask away when you need assistance? Happy Otaku-ing Meghan!"
   }
 ]

@@ -6,13 +6,13 @@ from utility.textSearch import txt
 
 
 def box_type():
-    if (txt.search("box_borders", "saves/default/config.txt")) == "HEAVY":
+    if (txt.search("box_borders", "saves/default/config.conf")) == "HEAVY":
         return box.HEAVY
-    elif (txt.search("box_borders", "saves/default/config.txt")) == "DOUBLE":
+    elif (txt.search("box_borders", "saves/default/config.conf")) == "DOUBLE":
         return box.DOUBLE
-    elif (txt.search("box_borders", "saves/default/config.txt")) == "ROUNDED":
+    elif (txt.search("box_borders", "saves/default/config.conf")) == "ROUNDED":
         return box.HEAVY
-    elif (txt.search("box_borders", "saves/default/config.txt")) == "SQUARE":
+    elif (txt.search("box_borders", "saves/default/config.conf")) == "SQUARE":
         return box.SQUARE
     else:
         return box.SIMPLE
@@ -24,11 +24,11 @@ class Tables:
 
     def center_table(text):
         width = 0
-        if int(txt.search("box_width", "saves/default/config.txt")) == 0:
+        if int(txt.search("box_width", "saves/default/config.conf")) == 0:
 
             table = Table(show_header=False, safe_box=True, box=box_type(), expand=True)
         else:
-            width = int(txt.search("box_width", "saves/default/config.txt"))
+            width = int(txt.search("box_width", "saves/default/config.conf"))
             table = Table(
                 show_header=False,
                 safe_box=True,
@@ -41,11 +41,11 @@ class Tables:
 
     def normal_table(text):
         width = 0
-        if int(txt.search("box_width", "saves/default/config.txt")) == 0:
+        if int(txt.search("box_width", "saves/default/config.conf")) == 0:
 
             table = Table(show_header=False, safe_box=True, box=box_type(), expand=True)
         else:
-            width = int(txt.search("box_width", "saves/default/config.txt"))
+            width = int(txt.search("box_width", "saves/default/config.conf"))
             table = Table(
                 show_header=False,
                 safe_box=True,
@@ -59,10 +59,10 @@ class Tables:
     def multi_table(text):
         width = 0
 
-        if int(txt.search("box_width", "saves/default/config.txt")) == 0:
+        if int(txt.search("box_width", "saves/default/config.conf")) == 0:
             tb = Table(show_footer=False, safe_box=True, box=None, expand=True)
         else:
-            width = int(txt.search("box_width", "saves/default/config.txt"))
+            width = int(txt.search("box_width", "saves/default/config.conf"))
             tb = Table(
                 show_footer=False,
                 safe_box=True,
@@ -82,10 +82,10 @@ class Tables:
 
     def table_with_emotion(text, emotion):
         width = 0
-        if int(txt.search("box_width", "saves/default/config.txt")) == 0:
+        if int(txt.search("box_width", "saves/default/config.conf")) == 0:
             table = Table(show_header=False, safe_box=True, box=box_type(), expand=True)
         else:
-            width = int(txt.search("box_width", "saves/default/config.txt"))
+            width = int(txt.search("box_width", "saves/default/config.conf"))
 
             table = Table(
                 show_header=False,
@@ -96,7 +96,7 @@ class Tables:
 
         table.add_column(
             "emotion",
-            width=int(txt.search("width", "saves/default/config.txt")),
+            width=int(txt.search("width", "saves/default/config.conf")),
             overflow="fold",
             no_wrap=True,
             justify="left",
@@ -105,18 +105,18 @@ class Tables:
         table.add_column(
             "text", vertical="middle", no_wrap=False, justify="left", ratio=1
         )
-        table.add_row(emotion, txt.search("normal", "saves/default/config.txt") + text)
+        table.add_row(emotion, txt.search("normal", "saves/default/config.conf") + text)
 
         return table
 
     def table_without_emotion(text):
         width = 0
         width = 0
-        if int(txt.search("box_width", "saves/default/config.txt")) == 0:
+        if int(txt.search("box_width", "saves/default/config.conf")) == 0:
 
             table = Table(show_header=False, safe_box=True, box=box_type(), expand=True)
         else:
-            width = int(txt.search("box_width", "saves/default/config.txt"))
+            width = int(txt.search("box_width", "saves/default/config.conf"))
             table = Table(
                 show_header=False,
                 safe_box=True,

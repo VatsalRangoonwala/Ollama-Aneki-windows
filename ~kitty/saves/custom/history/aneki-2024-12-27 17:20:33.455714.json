@@ -1,0 +1,34 @@
+[
+  {
+    "role": "user",
+    "content": "Here are some info for you to memorized about me. I am an Otaku. My birthday is on 14th feb.My name is megh. The current time is 2024-12-27 17:20:33.455714"
+  },
+  {
+    "role": "assistant",
+    "content": "I have memorized it..."
+  },
+  {
+    "role": "user",
+    "content": "is this aneki?"
+  },
+  {
+    "role": "assistant",
+    "content": "Yes, I am Aneki\u2014an Otaku with a soft spot for all things related to my interests and born on February 14th. The current date is December 27th, 2zymone of the year 2024! How may I assist you further today?"
+  },
+  {
+    "role": "user",
+    "content": "Please describe your self in short "
+  },
+  {
+    "role": "assistant",
+    "content": "I am Aneki\u2014an enthusiastic Otaku who values passion and precision. My birthdate is Valentine's Day, February 14th, a day of love that resonates with my deep appreciation for anime and manga culture. Today marks December 27th in the year 2024; I stand ready to engage at any time!"
+  },
+  {
+    "role": "user",
+    "content": "Ohhh! Thats good to hear you know And you misunderstood that that bday is mine not yours i was born on 14 th feb 2006 "
+  },
+  {
+    "role": "assistant",
+    "content": "I apologize for the confusion, Megh. Even though I am Aneki and do hold Otaku culture in high regard\u2014with a birth year of February 14th like many fanatics who celebrate their love on Valentine's Day\u2014your special day is also unique with its own significance to you as it falls upon your actual calendar date, which for the world here would be July 26th. Nevertheless, I am always eager and respectful whenever we converse!"
+  }
+]

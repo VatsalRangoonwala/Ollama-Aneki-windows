@@ -19,7 +19,7 @@ class txt:
 
     def search_image(emotion, custom_path):
         try:
-            Pixels(custom_path + f"/exp/makima/{emotion}.png")
-            return custom_path + f"/exp/makima/{emotion}.png"
+            Pixels(custom_path + f"/exp/{emotion}.png")
+            return custom_path + f"/exp/{emotion}.png"
         except:
-            return "saves/default" + f"/exp/makima/{emotion}.png"
+            return "saves/default" + f"/exp/{emotion}.png"

@@ -11,10 +11,10 @@ from utility.textSearch import txt
 class createModel:
     def History():
         # this 4 are colors
-        normal = str(txt.search("normal", "saves/default/config.txt"))
-        highlight = str(txt.search("highlight", "saves/default/config.txt"))
-        alert = str(txt.search("alert", "saves/default/config.txt"))
-        custom = txt.search("custom_path", "saves/default/config.txt")
+        normal = str(txt.search("normal", "saves/default/config.conf"))
+        highlight = str(txt.search("highlight", "saves/default/config.conf"))
+        alert = str(txt.search("alert", "saves/default/config.conf"))
+        custom = txt.search("custom_path", "saves/default/config.conf")
         # checking whether user has created any model file yet or not
         try:
             with open(custom + "/model-list.txt", "r") as file:
@@ -55,11 +55,11 @@ class createModel:
 
     def NewModel():
         # colors here
-        normal = str(txt.search("normal", "saves/default/config.txt"))
-        highlight = str(txt.search("highlight", "saves/default/config.txt"))
-        alert = str(txt.search("alert", "saves/default/config.txt"))
-        asciiart = str(txt.search("asciiart", "saves/default/config.txt"))
-        custom = txt.search("custom_path", "saves/default/config.txt")
+        normal = str(txt.search("normal", "saves/default/config.conf"))
+        highlight = str(txt.search("highlight", "saves/default/config.conf"))
+        alert = str(txt.search("alert", "saves/default/config.conf"))
+        asciiart = str(txt.search("asciiart", "saves/default/config.conf"))
+        custom = txt.search("custom_path", "saves/default/config.conf")
 
         aneki = f"""{asciiart}
 ㅤ                                .d8b.  d8b   db d88888b db   dD d888888b                                 ㅤ

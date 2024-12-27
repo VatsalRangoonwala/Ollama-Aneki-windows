@@ -6,13 +6,13 @@ from utility.textSearch import txt
 
 class AsciiMerge:
     def merge():
-        asciis1_path = txt.search("asciis1_path", "saves/default/config.txt")
+        asciis1_path = txt.search("asciis1_path", "saves/default/config.conf")
         arts = open(asciis1_path, "r").read().split("\n\n\n")
 
         #
         # CUSTOM TEXTS
         #
-        ascii2_path = txt.search("ascii2_path", "saves/default/config.txt")
+        ascii2_path = txt.search("ascii2_path", "saves/default/config.conf")
         Aneki = open(ascii2_path, "r").read()
 
         def ascii_art(fulllarge, fullshort):
@@ -49,11 +49,11 @@ class AsciiMerge:
                 print("Default Ascii art detected, skipping...")
             else:
                 print("Custom Ascii art detected, adding into custom...")
-                Path(txt.search("custom_path", "saves/default/config.txt")).mkdir(
+                Path(txt.search("custom_path", "saves/default/config.conf")).mkdir(
                     parents=True, exist_ok=True
                 )
                 with open(
-                    txt.search("custom_path", "saves/default/config.txt") + "/art.txt",
+                    txt.search("custom_path", "saves/default/config.conf") + "/art.txt",
                     "w",
                 ) as customtxtfile:
                     customtxtfile.write(file)
