@@ -19,6 +19,7 @@ from rich.live import Live
 from rich.prompt import Prompt
 from rich.table import Table
 
+from tui.pngpixel import pngPix
 from utility.richtables import Tables
 from utility.textSearch import txt
 
@@ -33,8 +34,31 @@ from utility.textSearch import txt
 
 def display_image(image_path, rectangle, id):
     subprocess.run(
-        ["kitten", "icat", "--place", rectangle, "--image-id", str(id), image_path]
+        [
+            "kitten",
+            "icat",
+            "--z-index",
+            "-5",
+            "--align",
+            "left",
+            "--image-id",
+            str(id),
+            image_path,
+        ]
     )
+    # subprocess.run(
+    #     [
+    #         "kitten",
+    #         "icat",
+    #         "--place",
+    #         rectangle,
+    #         "--z-index",
+    #         "-50",
+    #         "--image-id",
+    #         str(id),
+    #         image_path,
+    #     ]
+    # )
 
 
 def clear_kitty_image():
@@ -252,6 +276,7 @@ class RunModel:
                         response = "joyful"
                         for chunk in stream:
                             msg += chunk["message"]["content"]
+                            live.update(Tables.table_with_emotion(msg, space))
                             if len(msg) % frequency < 3 and len(msg) < max_respose_size:
                                 response = model.function_call(msg)["llm_response"][
                                     "emotions"
@@ -269,14 +294,13 @@ class RunModel:
                                 # input()
                                 # input()
                                 # print("help")
-                                # display_image(pngPath, rectangle=rectangle, id=id)
+                                display_image(pngPath, rectangle=rectangle, id=id)
                                 # move_cursor(0, 0)
                                 # input()
                                 # restore_cursor()
                                 # input()
                                 # print("help2")
                                 # input()
-                            live.update(Tables.table_with_emotion(msg, space))
 
                         if len(msg) > max_respose_size:
                             response = model.function_call(msg[: max_respose_size - 1])[
@@ -298,7 +322,7 @@ class RunModel:
                     # hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
                     #
                     #
-                    display_image(pngPath, rectangle, id=id)
+                    # display_image(pngPath, rectangle, id=id)
                     print("\n\n")
 
                     # move_cursor(0, 0)
@@ -399,5 +423,59 @@ class RunModel:
                     user_input = input("\n" + user_conversation + " ")
 
 
+# def requiredLines(img, width, char, lines):
+#     buf = array.array("H", [0, 0, 0, 0])
+#     fcntl.ioctl(1, termios.TIOCGWINSZ, buf)
+#     displayresH = buf[3]
+#     displayresW = buf[2]
+#     return int(
+#         img.height
+#         / (((img.width / width) / (displayresW / char)) * (displayresH / lines))
+#     )
+
+
+# def new_height_width(image_path, width):
+#     png = Image.open(image_path)
+#     buf = array.array("H", [0, 0, 0, 0])
+#     fcntl.ioctl(1, termios.TIOCGWINSZ, buf)
+#     displayresH = buf[3]
+#     displayresW = buf[2]
+#     print(displayresW, displayresH)
+#     char, lines = shutil.get_terminal_size()
+#     required_height = int(
+#         requiredLines(png, width, char, lines) * (displayresH / lines)
+#     )
+#     required_width = int(width * (displayresW / char))
+#     print("old height:", png.height, "new height:", required_height)
+#     print("old width:", png.width, "new width:", required_width)
+#     return required_width, required_height
+
+
+# height, width = new_height_width(
+#     txt.search_image("joyful", txt.search("custom_path", "saves/default/config.conf")),
+#     int(txt.search("width", "saves/default/config.conf")),
+# )
+# print(height, width)
+# pngpixs = pngPix(
+#     height=height,
+#     width=width,
+#     highlight=txt.search("highlight", "saves/default/config.conf"),
+#     alert=txt.search("alert", "saves/default/config.conf"),
+#     normal=txt.search("normal", "saves/default/config.conf"),
+#     paths=txt.search("custom_path", "saves/default/config.conf"),
+# )
+
+# subprocess.run(
+#     [
+#         "kitten",
+#         "icat",
+#         "--z-index",
+#         "-50",
+#         "--image-id",
+#         "5",
+#         "saves/default/lowres/guilty.png",
+#     ]
+# )
+# pngpixs.lower_resolution()
 runmodel = RunModel()
 runmodel.new_run("aneki")
