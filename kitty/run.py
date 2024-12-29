@@ -2,7 +2,6 @@ import array
 import datetime
 import fcntl
 import json
-import os
 import shutil
 import subprocess
 import sys
@@ -22,9 +21,36 @@ from utility.richtables import Tables
 from utility.textSearch import txt
 
 
+def requiredLines(img, width, char, lines):
+    buf = array.array("H", [0, 0, 0, 0])
+    fcntl.ioctl(1, termios.TIOCGWINSZ, buf)
+    displayresH = buf[3]
+    displayresW = buf[2]
+    return int(
+        img.height
+        / (((img.width / width) / (displayresW / char)) * (displayresH / lines))
+    )
+
+
 def clear_kitty_image():
     sys.stdout.write("\033c")
     sys.stdout.flush()
+
+
+def display_image(image_path, rectangle, id):
+    subprocess.run(
+        [
+            "kitten",
+            "icat",
+            "--place",
+            rectangle,
+            "--z-index",
+            "-1",
+            "--image-id",
+            str(id),
+            image_path,
+        ]
+    )
 
 
 class RunModel:
@@ -49,19 +75,6 @@ class RunModel:
                 ):
                     raise
 
-                def requiredLines(img, height, width, char, lines):
-                    buf = array.array("H", [0, 0, 0, 0])
-                    fcntl.ioctl(1, termios.TIOCGWINSZ, buf)
-                    displayresH = buf[3]
-                    displayresW = buf[2]
-                    return int(
-                        img.height
-                        / (
-                            ((img.width / width) / (displayresW / char))
-                            * (displayresH / lines)
-                        )
-                    )
-
                 with open(
                     cpath + "/history/" + logs + "-emotions.json",
                     "r",
@@ -84,7 +97,7 @@ class RunModel:
                             )
                             else int(width * png.height / png.width)
                         )
-                        required_lines = requiredLines(png, height, width, char, lines)
+                        required_lines = requiredLines(png, width, char, lines)
                         rectangle = str(width) + "x" + str(height) + "@" "2x" + str(
                             int(lines - required_lines - 5)
                         )
@@ -125,187 +138,226 @@ class RunModel:
                     else:
                         rprint(Tables.table_without_emotion(history[i]["content"]))
 
-    # def ConinueFromWhereItLeft(self, logs):
-    #     now = str(datetime.datetime.now())
-    #     cpath = txt.search("custom_path", "saves/default/config.conf")
-    #     models = (
-    #             open(
-    #                 cpath + "/model-list.txt",
-    #                 "r",
-    #             )
-    #             .read()
-    #             .split("\n")[:-1]
-    #         )
-    #         model_name = Prompt.ask(
-    #             "Select Model: ",
-    #             default=models[0],
-    #             choices=models,
-    #         )
-    #     memory_list = []
-    #     emotionlist = []
-    #     with open(cpath + f"/models/{model_name}.json", "r") as file:
-    #         memory_list = json.load(file)
-    #         memory_list[0]["content"] += ". The current time is " + now
+    def ConinueFromWhereItLeft(self, logs):
+        now = str(datetime.datetime.now())
+        cpath = txt.search("custom_path", "saves/default/config.conf")
+        models = (
+            open(
+                cpath + "/model-list.txt",
+                "r",
+            )
+            .read()
+            .split("\n")[:-1]
+        )
 
-    #     with open(
-    #         cpath + "/history/" + logs + ".json",
-    #         "r",
-    #     ) as history:
-    #         history = json.load(history)[2:]
-    #         choices = []
-    #         print("\n")
-    #         for i in range(int(len(history) / 2)):
-    #             choices.append(str(i + 1))
-    #             rprint(
-    #                 txt.search("highlight", "saves/default/config.conf")
-    #                 + str(i + 1)
-    #                 + " "
-    #                 + txt.search("normal", "saves/default/config.conf")
-    #                 + history[i * 2]["content"]
-    #             )
-    #         print("\n")
-    #         indexs = int(
-    #             Prompt.ask(
-    #                 "From where do you want to continue",
-    #                 default=str(int(len(history) / 2)),
-    #                 choices=choices,
-    #             )
-    #         )
-    #         history = history[: (indexs) * 2]
-    #         with open(cpath + "/history/" + logs + ".json", "w") as chats:
-    #             for h in history:
-    #                 memory_list.append(h)
-    #             json.dump(memory_list, chats, indent=2)
-    #         try:
-    #             with open(
-    #                 cpath + "/history/" + logs + "-emotions.json",
-    #                 "r",
-    #             ) as emotionlist:
-    #                 emotionlist = json.load(emotionlist)
-    #                 emotionlist = emotionlist[:indexs]
-    #                 with open(
-    #                     cpath + "/history/" + logs + "-emotions.json",
-    #                     "w",
-    #                 ) as emotion:
+        model_name = Prompt.ask(
+            "Select Model: ",
+            default=models[0],
+            choices=models,
+        )
+        memory_list = []
+        emotionlist = []
+        with open(cpath + f"/models/{model_name}.json", "r") as file:
+            memory_list = json.load(file)
+            memory_list[0]["content"] += ". The current time is " + now
 
-    #                     json.dump(emotionlist, emotion, indent=2)
-    #         except:
-    #             pass
+        with open(
+            cpath + "/history/" + logs + ".json",
+            "r",
+        ) as history:
+            history = json.load(history)[2:]
+            choices = []
+            print("\n")
+            for i in range(int(len(history) / 2)):
+                choices.append(str(i + 1))
+                rprint(
+                    txt.search("highlight", "saves/default/config.conf")
+                    + str(i + 1)
+                    + " "
+                    + txt.search("normal", "saves/default/config.conf")
+                    + history[i * 2]["content"]
+                )
+            print("\n")
+            indexs = int(
+                Prompt.ask(
+                    "From where do you want to continue",
+                    default=str(int(len(history) / 2)),
+                    choices=choices,
+                )
+            )
+            history = history[: (indexs) * 2]
+            with open(cpath + "/history/" + logs + ".json", "w") as chats:
+                for h in history:
+                    memory_list.append(h)
+                json.dump(memory_list, chats, indent=2)
+            try:
+                with open(
+                    cpath + "/history/" + logs + "-emotions.json",
+                    "r",
+                ) as emotionlist:
+                    emotionlist = json.load(emotionlist)
+                    emotionlist = emotionlist[:indexs]
+                    with open(
+                        cpath + "/history/" + logs + "-emotions.json",
+                        "w",
+                    ) as emotion:
 
-    #     max_respose_size = int(
-    #         txt.search("max_respose_size", "saves/default/config.conf")
-    #     )
-    #     length = 2 * int(txt.search("memory_length", "saves/default/config.conf"))
-    #     user_conversation = txt.search("user_conversation", "saves/default/config.conf")
-    #     frequency = int(txt.search("frequency", "saves/default/config.conf"))
-    #     with open(cpath + f"/models/{model_name}.json", "r") as file:
-    #         memory = json.load(file)
-    #         memory[0]["content"] += ". The current time is " + now
+                        json.dump(emotionlist, emotion, indent=2)
+            except:
+                pass
+        print("I am heree\n")
+        max_respose_size = int(
+            txt.search("max_respose_size", "saves/default/config.conf")
+        )
+        length = 2 * int(txt.search("memory_length", "saves/default/config.conf"))
+        user_conversation = txt.search("user_conversation", "saves/default/config.conf")
+        with open(cpath + f"/models/{model_name}.json", "r") as file:
+            memory = json.load(file)
+            memory[0]["content"] += ". The current time is " + now
 
-    #         def length_ret(leng, hist):
-    #             if leng < len(hist):
-    #                 hist = hist[(len(hist) - leng) + 1 :]
-    #                 new_hist = memory
-    #                 for h in hist:
-    #                     new_hist.append(h)
-    #                 print(new_hist)
-    #                 return new_hist
-    #             else:
-    #                 return hist
+            def length_ret(leng, hist):
+                if leng < len(hist):
+                    hist = hist[(len(hist) - leng) + 1 :]
+                    new_hist = memory
+                    for h in hist:
+                        new_hist.append(h)
+                    print(new_hist)
+                    return new_hist
+                else:
+                    return hist
 
-    #         history = memory_list
-    #         if int(txt.search("emotion_generation", "saves/default/config.conf")) >= 1:
-    #             emotions = emotionlist
-    #             model = ModelCatalog().load_model("slim-emotions-tool")
-    #             if int(txt.search("auto_clear", "saves/default/config.conf")) >= 1:
-    #                 subprocess.run(["clear"])
-    #                 clear_kitty_image()
-    #                 self.read(logs)
-    #             user_input = input("\n" + user_conversation + " ")
-    #             while user_input.lower() != txt.search("exit_code", "saves/default/config.conf").lower():
-    #                 history.append({"role": "user", "content": user_input})
-    #                 stream = ollama.chat(
-    #                     model=model_name,
-    #                     messages=length_ret(length, history),
-    #                     stream=True,
-    #                 )
-    #                 msg = ""
-    #                 with Live(Table(), auto_refresh=True) as live:
-    #                     response = "joyful"
-    #                     art = txtdasdsadsa.search_image(response, cpath)
-    #                     for chunk in stream:
-    #                         msg += chunk["message"]["content"]
-    #                         if len(msg) % frequency < 3 and len(msg) < max_respose_size:
-    #                             response = model.function_call(msg)["llm_response"][
-    #                                 "emotions"
-    #                             ][0]
-    #                             art = txtasdsadsa.search_image(response, cpath)
-    #                         live.update(Tables.table_with_emotion(msg, art))
-    #                     if len(msg) > max_respose_size:
-    #                         response = model.function_call(msg[: max_respose_size - 1])[
-    #                             "llm_response"
-    #                         ]["emotions"][0]
-    #                     else:
-    #                         response = model.function_call(msg)["llm_response"][
-    #                             "emotions"
-    #                         ][0]
-    #                     live.update(
-    #                         Tables.table_with_emotion(
-    #                             msg, txtasdasd.search_image(response, cpath)
-    #                         )
-    #                     )
-    #                 emotions.append(response)
-    #                 with open(cpath + f"/history/{logs}-emotions.json", "w") as emotion:
-    #                     json.dump(emotions, emotion, indent=2)
+            history = memory_list
+            self.read(logs)
+            if int(txt.search("emotion_generation", "saves/default/config.conf")) >= 1:
+                emotions = emotionlist
+                model = ModelCatalog().load_model("slim-emotions-tool")
 
-    #                 history.append(
-    #                     {
-    #                         "role": "assistant",
-    #                         "content": msg,
-    #                     }
-    #                 )
-    #                 with open(cpath + f"/history/{logs}.json", "w") as chats:
-    #                     json.dump(history, chats, indent=2)
+                width = int(txt.search("width", "saves/default/config.conf"))
+                char, lines = shutil.get_terminal_size()
+                pngPath = txt.search_image("joyful", cpath)
+                png = Image.open(pngPath)
+                height = (
+                    int(width * png.height / png.width) + 1
+                    if (
+                        int(width * png.height / png.width)
+                        != (width * png.height / png.width)
+                    )
+                    else int(width * png.height / png.width)
+                )
+                required_lines = requiredLines(png, width, char, lines)
+                rectangle = str(width) + "x" + str(height) + "@" "2x" + str(
+                    lines - required_lines - 3
+                )
+                space = ""
+                for _ in range(required_lines):
+                    for _ in range(width):
+                        space += " "
+                    space += "\n"
 
-    #                 if (
-    #                     int(txt.search("reprint_everytime", "saves/default/config.conf"))
-    #                     >= 1
-    #                 ):
-    #                     subprocess.run(["clear"])
-    #                     clear_kitty_image()
-    #                     self.read(logs)
-    #                 user_input = input("\n" + user_conversation + " ")
-    #         else:
-    #             self.read(logs)
-    #             user_input = input("\n" + user_conversation + " ")
-    #             while user_input.lower() != txt.search("exit_code", "saves/default/config.conf").lower():
-    #                 history.append({"role": "user", "content": user_input})
-    #                 stream = ollama.chat(
-    #                     model=model_name,
-    #                     messages=length_ret(length, history),
-    #                     stream=True,
-    #                 )
-    #                 msg = ""
-    #                 with Live(Table(), auto_refresh=True) as live:
-    #                     for chunk in stream:
-    #                         msg += chunk["message"]["content"]
-    #                         live.update(Tables.table_without_emotion(msg))
-    #                 history.append(
-    #                     {
-    #                         "role": "assistant",
-    #                         "content": msg,
-    #                     }
-    #                 )
-    #                 with open(cpath + f"/history/{logs}.json", "w") as chats:
-    #                     json.dump(history, chats, indent=2)
-    #                 if (
-    #                     int(txt.search("reprint_everytime", "saves/default/config.conf"))
-    #                     >= 1
-    #                 ):
-    #                     subprocess.run(["clear"])
-    #                     clear_kitty_image()
-    #                     self.read(logs)
-    #                 user_input = input("\n" + user_conversation + " ")
+
+                if int(txt.search("auto_clear", "saves/default/config.conf")) >= 1:
+                    subprocess.run(["clear"])
+                    clear_kitty_image()
+                    self.read(logs)
+                user_input = input("\n" + user_conversation + " ")
+                id = 0
+                while (
+                    user_input.lower()
+                    != txt.search("exit_code", "saves/default/config.conf").lower()
+                ):
+                    id += 1
+                    history.append({"role": "user", "content": user_input})
+                    stream = ollama.chat(
+                        model=model_name,
+                        messages=length_ret(length, history),
+                        stream=True,
+                    )
+                    msg = ""
+                    flag = True
+                    with Live(Table(), auto_refresh=True) as live:
+                        response = "joyful"
+                        for chunk in stream:
+                            msg += chunk["message"]["content"]
+                            live.update(Tables.table_with_emotion(msg, space))
+                            if len(msg) > max_respose_size and flag:
+                                response = model.function_call(msg)["llm_response"][
+                                    "emotions"
+                                ][0]
+                                pngPath = txt.search_image(response, cpath)
+                                flag = False
+                    live.update(Tables.table_with_emotion(msg, space))
+                    if flag or not flag:
+                        if len(msg) > max_respose_size:
+                            response = model.function_call(msg[: max_respose_size - 1])[
+                                "llm_response"
+                            ]["emotions"][0]
+                        else:
+                            response = model.function_call(msg)["llm_response"][
+                                "emotions"
+                            ][0]
+                        pngPath = txt.search_image(response, cpath)
+                        display_image(pngPath, rectangle, id=id)
+                    for _ in range(required_lines + 2):
+                        print("")
+                    emotions.append(response)
+                    with open(cpath + f"/history/{logs}-emotions.json", "w") as emotion:
+                        json.dump(emotions, emotion, indent=2)
+
+                    history.append(
+                        {
+                            "role": "assistant",
+                            "content": msg,
+                        }
+                    )
+                    with open(cpath + f"/history/{logs}.json", "w") as chats:
+                        json.dump(history, chats, indent=2)
+
+                    if (
+                        int(
+                            txt.search("reprint_everytime", "saves/default/config.conf")
+                        )
+                        >= 1
+                    ):
+                        subprocess.run(["clear"])
+                        clear_kitty_image()
+                        self.read(logs)
+                    user_input = input("\n" + user_conversation + " ")
+            else:
+                self.read(logs)
+                user_input = input("\n" + user_conversation + " ")
+                while (
+                    user_input.lower()
+                    != txt.search("exit_code", "saves/default/config.conf").lower()
+                ):
+                    history.append({"role": "user", "content": user_input})
+                    stream = ollama.chat(
+                        model=model_name,
+                        messages=length_ret(length, history),
+                        stream=True,
+                    )
+                    msg = ""
+                    with Live(Table(), auto_refresh=True) as live:
+                        for chunk in stream:
+                            msg += chunk["message"]["content"]
+                            live.update(Tables.table_without_emotion(msg))
+                    history.append(
+                        {
+                            "role": "assistant",
+                            "content": msg,
+                        }
+                    )
+                    with open(cpath + f"/history/{logs}.json", "w") as chats:
+                        json.dump(history, chats, indent=2)
+                    if (
+                        int(
+                            txt.search("reprint_everytime", "saves/default/config.conf")
+                        )
+                        >= 1
+                    ):
+                        subprocess.run(["clear"])
+                        clear_kitty_image()
+                        self.read(logs)
+                    user_input = input("\n" + user_conversation + " ")
 
     def new_run(self, model_name):
         now = str(datetime.datetime.now())
@@ -327,8 +379,8 @@ class RunModel:
         max_respose_size = int(
             txt.search("max_respose_size", "saves/default/config.conf")
         )
-        frequency = int(txt.search("frequency", "saves/default/config.conf"))
         Path(custom + "/history/").mkdir(parents=True, exist_ok=True)
+        # subprocess.run(["clear"])
         with open(custom + f"/models/{model_name}.json", "r") as file:
             memory = json.load(file)
             memory[0]["content"] += ". The current time is " + now
@@ -339,7 +391,6 @@ class RunModel:
                     new_hist = memory
                     for h in hist:
                         new_hist.append(h)
-                    # print(new_hist)
                     return new_hist
                 else:
                     return hist
@@ -350,25 +401,30 @@ class RunModel:
 
             if int(txt.search("emotion_generation", "saves/default/config.conf")) >= 1:
 
-                def requiredLines(img, height, width, char, lines):
+                def requiredLines(img, width, char, lines):
                     buf = array.array("H", [0, 0, 0, 0])
                     fcntl.ioctl(1, termios.TIOCGWINSZ, buf)
                     displayresH = buf[3]
                     displayresW = buf[2]
-                    return int(
-                        img.height
-                        / (
-                            ((img.width / width) / (displayresW / char))
-                            * (displayresH / lines)
+                    try:
+                        return int(
+                            img.height
+                            / (
+                                ((img.width / width) / (displayresW / char))
+                                * (displayresH / lines)
+                            )
                         )
-                    )
+                    except:
+                        rprint(
+                            f"{txt.search('alert', 'saves/default/config.conf')} Are you sure you are using right terminal because we arn't getting precise height and width of terminal"
+                        )
 
                 emotions = []
                 model = ModelCatalog().load_model("slim-emotions-tool")
                 if int(txt.search("auto_clear", "saves/default/config.conf")) >= 1:
                     subprocess.run(["clear"])
                     clear_kitty_image()
-                user_input = input("\n" + user_conversation + " ")
+
                 width = int(txt.search("width", "saves/default/config.conf"))
                 char, lines = shutil.get_terminal_size()
                 pngPath = txt.search_image("joyful", custom)
@@ -381,21 +437,24 @@ class RunModel:
                     )
                     else int(width * png.height / png.width)
                 )
-                required_lines = requiredLines(png, height, width, char, lines)
+                required_lines = requiredLines(png, width, char, lines)
                 rectangle = str(width) + "x" + str(height) + "@" "2x" + str(
-                    int(lines - required_lines - 5)
+                    lines - required_lines - 3
                 )
                 space = ""
                 for _ in range(required_lines):
                     for _ in range(width):
                         space += " "
                     space += "\n"
-                # for _ in range(lines):
-                #     print("")
+                for _ in range(lines):
+                    print(" ")
+                user_input = input("\n" + user_conversation + " ")
+                id = 0
                 while (
                     user_input.lower()
                     != txt.search("exit_code", "saves/default/config.conf").lower()
                 ):
+                    id += 1
                     history.append({"role": "user", "content": user_input})
                     stream = ollama.chat(
                         model=model_name,
@@ -403,21 +462,20 @@ class RunModel:
                         stream=True,
                     )
                     msg = ""
+                    flag = True
                     with Live(Table(), auto_refresh=True) as live:
                         response = "joyful"
-
                         for chunk in stream:
                             msg += chunk["message"]["content"]
-                            if len(msg) % frequency < 3 and len(msg) < max_respose_size:
+                            live.update(Tables.table_with_emotion(msg, space))
+                            if len(msg) > max_respose_size and flag:
                                 response = model.function_call(msg)["llm_response"][
                                     "emotions"
                                 ][0]
-                            live.update(Tables.table_with_emotion(msg, space))
-                            pngPath = txt.search_image(response, custom)
-                            subprocess.run(
-                                ["kitten", "icat", "--place", rectangle, pngPath]
-                            )
-
+                                pngPath = txt.search_image(response, custom)
+                                flag = False
+                    live.update(Tables.table_with_emotion(msg, space))
+                    if flag or not flag:
                         if len(msg) > max_respose_size:
                             response = model.function_call(msg[: max_respose_size - 1])[
                                 "llm_response"
@@ -426,15 +484,10 @@ class RunModel:
                             response = model.function_call(msg)["llm_response"][
                                 "emotions"
                             ][0]
-                        live.update(Tables.table_with_emotion(msg, space))
                         pngPath = txt.search_image(response, custom)
-                        subprocess.run(
-                            ["kitten", "icat", "--place", rectangle, pngPath]
-                        )
-                        for _ in range(required_lines + 1):
-                            print("")
-                        print("\n")
-
+                        display_image(pngPath, rectangle, id=id)
+                    for _ in range(required_lines + 2):
+                        print("")
                     emotions.append(response)
                     if ask_for_Topic:
                         with open(
