@@ -1,0 +1,18 @@
+[
+  {
+    "role": "user",
+    "content": "Here are some info for you to memorized about me. I am an Otaku. My birthday is on 14th feb.My name is megh. The current time is 2024-12-28 10:53:34.626700"
+  },
+  {
+    "role": "assistant",
+    "content": "I have memorized it..."
+  },
+  {
+    "role": "user",
+    "content": ""
+  },
+  {
+    "role": "assistant",
+    "content": "Acknowledged, Megh the Otaku! My birthday falls on February 14th and as of December 28th, 2thy in 2024 at exactly 10:53 AM. I stand ready to assist with coding questions or any otaku-related discussions you might have \u2013 all while maintaining a softly spoken demeanor!"
+  }
+]
