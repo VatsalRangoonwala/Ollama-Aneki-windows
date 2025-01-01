@@ -7,14 +7,14 @@ from utility.richtables import Tables
 
 
 class pngPix:
-    def __init__(self, height, width, highlight, alert, normal, paths):
+    def __init__(self, height, width, highlight, alert, normal, paths, pngfolder):
         self.height = height
         self.width = width
         self.highlight = highlight
         self.alert = alert
         self.normal = normal
         self.dLowResPath = "saves/default/lowres/"
-        self.dHighResPath = "saves/default/exp/"
+        self.dHighResPath = "saves/default/exp/" + pngfolder + "/"
         self.cLowResPath = paths + "/lowres/"
         self.cHighResPath = paths + "/exp/"
         self.emotions = [
@@ -66,6 +66,7 @@ class pngPix:
         Path(self.dLowResPath).mkdir(parents=True, exist_ok=True)
         Path(self.cHighResPath).mkdir(parents=True, exist_ok=True)
         text = "\n"
+
         try:
             text += f"{self.normal}Searching for custom images...\n"
             # Chceking wherether every emotion exist or not
@@ -82,6 +83,8 @@ class pngPix:
 
                 # save it
                 new_image.save(f"{self.cLowResPath}{emotion}.png")
+        # If custome has missing image eg if image consist 37 out of 38 emotions with correct
+        # name in custome but 1 is misplelled or not found, the program will move to default
         except:
             text += f"{self.alert}NO custom images found...\n"
             text += f"{self.highlight}Converting default images in {self.height}x{self.width}...\n"
