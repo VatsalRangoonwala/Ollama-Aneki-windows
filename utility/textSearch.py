@@ -11,9 +11,10 @@ class txt:
                     line = line.replace(" ", "")
                     if line.__contains__("//"):
                         line = line[: line.index("//")]
-                    if text in line:
+                    if text == line[: len(text)]:
                         return line.replace("\n", "").replace(text + "=", "")
-            except ValueError:
+                raise
+            except:
                 print(f"Something({text}) is missing from {path}")
                 raise ValueError
 
