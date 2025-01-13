@@ -1,7 +1,7 @@
 
 ![Ollama-Aneki1](https://github.com/user-attachments/assets/e855a33f-0d49-41de-991b-affb7ed9333e)
 
-**Ollama-Aneki is a sleek terminal user interface (TUI) designed to enhance the experience of using the Ollama CLI. With its intuitive and visually appealing design, it transforms the CLI into a more user-friendly and feature-rich tool.**
+Ollama-Aneki is a sleek terminal user interface (TUI) designed to enhance the experience of using the Ollama CLI. With its intuitive and visually appealing design, it transforms the CLI into a more user-friendly and feature-rich tool.
 
 
 # Features
