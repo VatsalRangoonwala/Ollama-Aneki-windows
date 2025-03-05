@@ -17,7 +17,7 @@ class createModel:
         custom = txt.search("custom_path", "saves/default/config.conf")
         # checking whether user has created any model file yet or not
         try:
-            with open(custom + "/model-list.txt", "r") as file:
+            with open(txt.pathOs(custom + "/model-list.txt"), "r",encoding="utf-8") as file:
                 pass
         except:
             Tables.normal_table(
@@ -26,7 +26,7 @@ class createModel:
             return
         # reading model file list to get list of every model created
         text = ""
-        with open(custom + "/model-list.txt", "r") as file:
+        with open(txt.pathOs(custom + "/model-list.txt"), "r",encoding="utf-8") as file:
             # If model file exist and it has only 1 length of data that means its \n
             # which means there is no model created yet
             modellist = file.read().split("\n")
@@ -41,7 +41,7 @@ class createModel:
                 choices=modellist,
             )
             # printing the selected model configration
-            with open(custom + f"/models/{selected}.txt", "r") as configuration:
+            with open(txt.pathOs(custom + f"/models/{selected}.txt"), "r",encoding="utf-8") as configuration:
                 conf = configuration.read()
                 conf = conf.split("\n\n")
                 text += f"\n{normal}Selected model is: {highlight}{selected}{highlight.replace('[', '[/')}\n"
@@ -117,22 +117,22 @@ class createModel:
         text += f"\n{normal}Creating a fresh model based on {highlight}{model}{highlight.replace('[', '[/')}{normal.replace('[', '[/')}"
         # Checks whether the modellist already exist or not.If not than it will create one
         try:
-            with open(custom + f"/models/{name}.txt", "w") as file:
+            with open(txt.pathOs(custom + f"/models/{name}.txt"), "w",encoding="utf-8") as file:
                 pass
         except:
-            Path(custom + "/models/").mkdir(parents=True, exist_ok=True)
+            Path(txt.pathOs(custom + "/models/")).mkdir(parents=True, exist_ok=True)
             with open(
-                custom + "/model-list.txt",
-                "w",
+                txt.pathOs(custom + "/model-list.txt"),
+                "w",encoding="utf-8",
             ) as file:
                 file.write("")
         try:
             # Creating a new model
             ollama.create(model = name, from_ = model, system = system)
             # Saving memory in json file
-            with open(custom + f"/models/{name}.txt", "w") as file:
+            with open(txt.pathOs(custom + f"/models/{name}.txt"), "w",encoding="utf-8") as file:
                 file.write("FROM " + model + "\n\n" + system + "\n\n" + "\n\n")
-            with open(custom + f"/models/{name}.json", "w") as file:
+            with open(txt.pathOs(custom + f"/models/{name}.json"), "w",encoding="utf-8") as file:
                 json.dump(
                     (
                         {
@@ -148,7 +148,7 @@ class createModel:
                     file,
                 )
             # Adding model name to model list
-            with open(custom + "/model-list.txt", "r") as modelslist:
+            with open(txt.pathOs(custom + "/model-list.txt"), "r",encoding="utf-8") as modelslist:
                 text += f"\n{normal}Checking if the model is already in the model list...{normal.replace('[', '[/')}"
                 modellist = modelslist.read()
                 try:
@@ -157,7 +157,7 @@ class createModel:
                 except:
                     text += f"\n{normal}{name} is a different model name...{normal.replace('[', '[/')}"
                     text += f"\n{normal}{name} has been added to the model list.{normal.replace('[', '[/')}"
-                    with open(custom + "/model-list.txt", "w") as newlist:
+                    with open(txt.pathOs(custom + "/model-list.txt"), "w",encoding="utf-8") as newlist:
                         newlist.write(modellist + name + "\n")
             text += (
                 f"\n{highlight}{name} has been created!{highlight.replace('[', '[/')}\n"
