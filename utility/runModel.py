@@ -1,5 +1,7 @@
 import datetime
 import json
+import os
+
 import subprocess
 from pathlib import Path
 
@@ -10,6 +12,8 @@ from rich import print as rprint
 from rich.live import Live
 from rich.prompt import Prompt
 from rich.table import Table
+
+
 
 from utility.richtables import Tables
 from utility.textSearch import txt
@@ -24,8 +28,8 @@ class RunModel:
         # Loading previous conversations titles
         cpath = txt.search("custom_path", "saves/default/config.conf")
         with open(
-            cpath + "/history/" + logs + ".json",
-            "r",
+            txt.pathOs(cpath + "/history/" + logs + ".json"),
+            "r",encoding="utf-8",
         ) as history:
             history = json.load(history)[2:]
             user_conversation = txt.search(
@@ -43,8 +47,8 @@ class RunModel:
                 ):
                     raise
                 with open(
-                    cpath + "/history/" + logs + "-emotions.json",
-                    "r",
+                    txt.pathOs(cpath + "/history/" + logs + "-emotions.json"),
+                    "r",encoding="utf-8",
                 ) as emotionlist:
                     emotionlist = json.load(emotionlist)
                     j = 0
@@ -74,8 +78,8 @@ class RunModel:
         cpath = txt.search("custom_path", "saves/default/config.conf")
         models = (
             open(
-                cpath + "/model-list.txt",
-                "r",
+                txt.pathOs(cpath + "/model-list.txt"),
+                "r",encoding="utf-8",
             )
             .read()
             .split("\n")[:-1]
@@ -87,13 +91,13 @@ class RunModel:
         )
         memory_list = []
         emotionlist = []
-        with open(cpath + f"/models/{model_name}.json", "r") as file:
+        with open(txt.pathOs(cpath + f"/models/{model_name}.json"), "r",encoding="utf-8") as file:
             memory_list = json.load(file)
             memory_list[0]["content"] += ". The current time is " + now
         # Loading previous conversations
         with open(
-            cpath + "/history/" + logs + ".json",
-            "r",
+            txt.pathOs(cpath + "/history/" + logs + ".json"),
+            "r",encoding="utf-8",
         ) as history:
             history = json.load(history)[2:]
             choices = []
@@ -118,21 +122,21 @@ class RunModel:
             )
             # Based on choice made by user we create new history by removing remaining conversation
             history = history[: (indexs) * 2]
-            with open(cpath + "/history/" + logs + ".json", "w") as chats:
+            with open(txt.pathOs(cpath + "/history/" + logs + ".json"), "w",encoding="utf-8") as chats:
                 for h in history:
                     memory_list.append(h)
                 json.dump(memory_list, chats, indent=2)
             # Now we try to load previous emotions if any.
             try:
                 with open(
-                    cpath + "/history/" + logs + "-emotions.json",
-                    "r",
+                    txt.pathOs(cpath + "/history/" + logs + "-emotions.json"),
+                    "r",encoding="utf-8",
                 ) as emotionlist:
                     emotionlist = json.load(emotionlist)
                     emotionlist = emotionlist[:indexs]
                     with open(
-                        cpath + "/history/" + logs + "-emotions.json",
-                        "w",
+                        txt.pathOs(cpath + "/history/" + logs + "-emotions.json"),
+                        "w",encoding="utf-8",
                     ) as emotion:
 
                         json.dump(emotionlist, emotion, indent=2)
@@ -145,7 +149,7 @@ class RunModel:
         length = 2 * int(txt.search("memory_length", "saves/default/config.conf"))
         user_conversation = txt.search("user_conversation", "saves/default/config.conf")
         frequency = int(txt.search("frequency", "saves/default/config.conf"))
-        with open(cpath + f"/models/{model_name}.json", "r") as file:
+        with open(txt.pathOs(cpath + f"/models/{model_name}.json"), "r",encoding="utf-8") as file:
             # To generate inintial memory
 
             memory = json.load(file)
@@ -169,7 +173,7 @@ class RunModel:
                 emotions = emotionlist
                 model = ModelCatalog().load_model("slim-emotions-tool")
                 if int(txt.search("auto_clear", "saves/default/config.conf")) >= 1:
-                    subprocess.run(["clear"])
+                    subprocess.run("cls", shell=True) if os.name == "nt" else subprocess.run(["clear"])
                     self.read(logs)
                 user_input = input("\n" + user_conversation + " ")
                 while (
@@ -218,7 +222,7 @@ class RunModel:
                             )
                         )
                     emotions.append(response)
-                    with open(cpath + f"/history/{logs}-emotions.json", "w") as emotion:
+                    with open(txt.pathOs(cpath + f"/history/{logs}-emotions.json"), "w",encoding="utf-8") as emotion:
                         json.dump(emotions, emotion, indent=2)
 
                     history.append(
@@ -228,7 +232,7 @@ class RunModel:
                         }
                     )
                     # Saving history
-                    with open(cpath + f"/history/{logs}.json", "w") as chats:
+                    with open(txt.pathOs(cpath + f"/history/{logs}.json"), "w",encoding="utf-8") as chats:
                         json.dump(history, chats, indent=2)
 
                     if (
@@ -237,7 +241,7 @@ class RunModel:
                         )
                         >= 1
                     ):
-                        subprocess.run(["clear"])
+                        subprocess.run("cls", shell=True) if os.name == "nt" else subprocess.run(["clear"])
                         self.read(logs)
                     user_input = input("\n" + user_conversation + " ")
             # Its a part that will run without emotion generation
@@ -266,7 +270,7 @@ class RunModel:
                         }
                     )
                     # Saving history
-                    with open(cpath + f"/history/{logs}.json", "w") as chats:
+                    with open(txt.pathOs(cpath + f"/history/{logs}.json"), "w",encoding="utf-8") as chats:
                         json.dump(history, chats, indent=2)
                     if (
                         int(
@@ -274,7 +278,7 @@ class RunModel:
                         )
                         >= 1
                     ):
-                        subprocess.run(["clear"])
+                        subprocess.run("cls", shell=True) if os.name == "nt" else subprocess.run(["clear"])
                         self.read(logs)
                     user_input = input("\n" + user_conversation + " ")
 
@@ -291,11 +295,11 @@ class RunModel:
         Topic = ""
         if ask_for_Topic:
             Topic = Prompt.ask("Save history with name: ", default=now)
-            with open(custom + "/historylog.txt", "a") as historylog:
+            with open(txt.pathOs(custom + "/historylog.txt"), "a",encoding="utf-8") as historylog:
                 historylog.write(f"{model_name}-{Topic}\n")
         # If user dont want to give name to history then it will be saved with current time
         else:
-            with open(custom + "/historylog.txt", "a") as historylog:
+            with open(txt.pathOs(custom + "/historylog.txt"), "a",encoding="utf-8") as historylog:
                 historylog.write(f"{model_name}-{now}\n")
 
         length = 2 * int(txt.search("memory_length", "saves/default/config.conf"))
@@ -304,8 +308,8 @@ class RunModel:
         )
         frequency = int(txt.search("frequency", "saves/default/config.conf"))
         # In case if path is not been created
-        Path(custom + "/history/").mkdir(parents=True, exist_ok=True)
-        with open(custom + f"/models/{model_name}.json", "r") as file:
+        Path(txt.pathOs(custom + "/history/")).mkdir(parents=True, exist_ok=True)
+        with open(txt.pathOs(custom + f"/models/{model_name}.json"), "r",encoding="utf-8") as file:
             memory = json.load(file)
             memory[0]["content"] += ". The current time is " + now
 
@@ -328,7 +332,7 @@ class RunModel:
                 emotions = []
                 model = ModelCatalog().load_model("slim-emotions-tool")
                 if int(txt.search("auto_clear", "saves/default/config.conf")) >= 1:
-                    subprocess.run(["clear"])
+                    subprocess.run("cls", shell=True) if os.name == "nt" else subprocess.run(["clear"])
                 user_input = input("\n" + user_conversation + " ")
                 while (
                     user_input.lower()
@@ -346,6 +350,7 @@ class RunModel:
                         art = txt.search_image(response, custom)
                         for chunk in stream:
                             msg += chunk["message"]["content"]
+                            print("i ama hereeee") 
                             if len(msg) % frequency < 3 and len(msg) < max_respose_size:
                                 response = model.function_call(msg)["llm_response"][
                                     "emotions"
@@ -369,12 +374,12 @@ class RunModel:
                     # If asked for topic is true then it will save history with the title as topic for emotions
                     if ask_for_Topic:
                         with open(
-                            custom + f"/history/{model_name}-{Topic}-emotions.json", "w"
+                            txt.pathOs(custom + f"/history/{model_name}-{Topic}-emotions.json"), "w",encoding="utf-8"
                         ) as emotion:
                             json.dump(emotions, emotion, indent=2)
                     else:
                         with open(
-                            custom + f"/history/{model_name}-{now}-emotions.json", "w"
+                            txt.pathOs(custom + f"/history/{model_name}-{now}-emotions.json"), "w",encoding="utf-8"
                         ) as emotion:
                             json.dump(emotions, emotion, indent=2)
 
@@ -388,7 +393,7 @@ class RunModel:
                     # If asked for topic is true then it will save history with the title as topic for conversation
                     if ask_for_Topic:
                         with open(
-                            custom + f"/history/{model_name}-{Topic}.json", "w"
+                            txt.pathOs(custom + f"/history/{model_name}-{Topic}.json"), "w",encoding="utf-8"
                         ) as chats:
                             json.dump(history, chats, indent=2)
                         # Since we neew to load history with topic so it will print history with topic
@@ -400,11 +405,11 @@ class RunModel:
                             )
                             >= 1
                         ):
-                            subprocess.run(["clear"])
+                            subprocess.run("cls", shell=True) if os.name == "nt" else subprocess.run(["clear"])
                             self.read(Topic)
                     else:
                         with open(
-                            custom + f"/history/{model_name}-{now}.json", "w"
+                            txt.pathOs(custom + f"/history/{model_name}-{now}.json"), "w",encoding="utf-8"
                         ) as chats:
                             json.dump(history, chats, indent=2)
                         if (
@@ -415,7 +420,7 @@ class RunModel:
                             )
                             >= 1
                         ):
-                            subprocess.run(["clear"])
+                            subprocess.run("cls", shell=True) if os.name == "nt" else subprocess.run(["clear"])
                             self.read(f"{model_name}-{now}")
 
                     user_input = input("\n" + user_conversation + " ")
@@ -445,7 +450,7 @@ class RunModel:
                     # If asked for topic is true then it will save history with the title as topic for conversation
                     if ask_for_Topic:
                         with open(
-                            custom + f"/history/{model_name}-{Topic}.json", "w"
+                            txt.pathOs(custom + f"/history/{model_name}-{Topic}.json"), "w",encoding="utf-8"
                         ) as chats:
                             json.dump(history, chats, indent=2)
                         if (
@@ -456,11 +461,11 @@ class RunModel:
                             )
                             >= 1
                         ):
-                            subprocess.run(["clear"])
+                            subprocess.run("cls", shell=True) if os.name == "nt" else subprocess.run(["clear"])
                             self.read(f"{model_name}-{now}")
                     else:
                         with open(
-                            custom + f"/history/{model_name}-{now}.json", "w"
+                            txt.pathOs(custom + f"/history/{model_name}-{now}.json"), "w",encoding="utf-8"
                         ) as chats:
                             json.dump(history, chats, indent=2)
                         if (
@@ -471,7 +476,7 @@ class RunModel:
                             )
                             >= 1
                         ):
-                            subprocess.run(["clear"])
+                            subprocess.run("cls", shell=True) if os.name == "nt" else subprocess.run(["clear"])
                             self.read(f"{model_name}-{now}")
 
                     user_input = input("\n" + user_conversation + " ")

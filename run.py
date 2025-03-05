@@ -1,5 +1,6 @@
 import subprocess
 import sys
+import os
 
 from rich import print as rprint
 from rich.prompt import Prompt
@@ -22,7 +23,7 @@ user = ""
 
 # To clear the terminal
 if auto_clear:
-    subprocess.run(["clear"])
+    subprocess.run("cls", shell=True) if os.name == "nt" else subprocess.run(["clear"])
 
 # Loads asciiart and prints in table
 Tables.center_table(
@@ -62,14 +63,14 @@ while user != "exit":
         )
 
     if auto_clear:
-        subprocess.run(["clear"])
+        subprocess.run("cls", shell=True) if os.name == "nt" else subprocess.run(["clear"])
     if user == "run":
         history = True
         try:
             open(
-                txt.search("custom_path", "saves/default/config.conf")
-                + "/historylog.txt",
-                "r",
+                txt.pathOs(txt.search("custom_path", "saves/default/config.conf")
+                + "/historylog.txt"),
+                "r",encoding="utf-8",
             ).read().split("\n")[:-1]
         # If user has not created any custom model yet than it will skip the run and ask user to create one
         except:
@@ -80,9 +81,9 @@ while user != "exit":
             if mode == "read" or mode == "cont":
                 logs = (
                     open(
-                        txt.search("custom_path", "saves/default/config.conf")
-                        + "/historylog.txt",
-                        "r",
+                        txt.pathOs(txt.search("custom_path", "saves/default/config.conf")
+                        + "/historylog.txt"),
+                        "r",encoding="utf-8",
                     )
                     .read()
                     .split("\n")[:-1]
@@ -109,9 +110,9 @@ while user != "exit":
             # This will provide all available models which are created by user
             available_option = (
                 open(
-                    txt.search("custom_path", "saves/default/config.conf")
-                    + "/model-list.txt",
-                    "r",
+                    txt.pathOs(txt.search("custom_path", "saves/default/config.conf")
+                    + "/model-list.txt"),
+                    "r",encoding="utf-8",
                 )
                 .read()
                 .split("\n")[:-1]
@@ -131,9 +132,9 @@ while user != "exit":
             try:
                 available_option = (
                     open(
-                        txt.search("custom_path", "saves/default/config.conf")
-                        + "/model-list.txt",
-                        "r",
+                        txt.pathOs(txt.search("custom_path", "saves/default/config.conf")
+                        + "/model-list.txt"),
+                        "r",encoding="utf-8",
                     )
                     .read()
                     .split("\n")[:-1]
@@ -146,9 +147,9 @@ while user != "exit":
                     "Model Name: ",
                     default=(
                         open(
-                            txt.search("custom_path", "saves/default/config.conf")
-                            + "/model-list.txt",
-                            "r",
+                            txt.pathOs(txt.search("custom_path", "saves/default/config.conf")
+                            + "/model-list.txt"),
+                            "r",encoding="utf-8"
                         )
                         .read()
                         .split("\n")[:-1]
